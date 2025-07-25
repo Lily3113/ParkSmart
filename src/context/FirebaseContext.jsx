@@ -2,8 +2,15 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth'; 
-import { getFirestore } from 'firebase/firestore'; 
+import {
+    getAuth,
+    // signInAnonymously, // <--- REMOVED THIS IMPORT
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signOut
+} from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 const FirebaseContext = createContext(null);
 
@@ -20,18 +27,15 @@ export const useFirebase = () => {
 // For production, consider using environment variables (e.g., process.env.REACT_APP_...)
 // rather than hardcoding.
 const firebaseConfig = {
-  apiKey: "AIzaSyD-bjX-o15WoKNrx5cB4NLo4437R00FmGM",
-  authDomain: "smartparking-c6d39.firebaseapp.com",
-  projectId: "smartparking-c6d39",
-  storageBucket: "smartparking-c6d39.firebasestorage.app",
-  messagingSenderId: "890113424601",
-  appId: "1:890113424601:web:071cd1c8812702653792c8",
-  measurementId: "G-7NC6ERSWWD"
+    apiKey: "AIzaSyD-bjX-o15WoKNrx5cB4NLo4437R00FmGM",
+    authDomain: "smartparking-c6d39.firebaseapp.com",
+    projectId: "smartparking-c6d39",
+    storageBucket: "smartparking-c6d39.firebasestorage.app",
+    messagingSenderId: "890113424601",
+    appId: "1:890113424601:web:071cd1c8812702653792c8",
+    measurementId: "G-7NC6ERSWWD"
 };
-// Define your app ID separately for Firestore paths, accessible outside useEffect
-// This variable needs to be accessible in the 'value' object below,
-// so it must be defined at the component's top level, outside any useEffect.
-const APP_ID_FOR_FIRESTORE_PATHS = firebaseConfig.appId; 
+const APP_ID_FOR_FIRESTORE_PATHS = firebaseConfig.appId;
 // =========================================================
 
 export const FirebaseProvider = ({ children }) => {
@@ -41,15 +45,43 @@ export const FirebaseProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isAuthReady, setIsAuthReady] = useState(false);
 
+    const login = async (email, password) => {
+        if (!auth) {
+            console.error("FirebaseContext: Auth instance is null during login attempt.");
+            throw new Error("Firebase Auth not initialized.");
+        }
+        console.log("FirebaseContext: Attempting to log in with:", email);
+        return await signInWithEmailAndPassword(auth, email, password);
+    };
+
+    const signup = async (email, password) => {
+        if (!auth) {
+            console.error("FirebaseContext: Auth instance is null during signup attempt.");
+            throw new Error("Firebase Auth not initialized.");
+        }
+        console.log("FirebaseContext: Attempting to sign up with:", email);
+        return await createUserWithEmailAndPassword(auth, email, password);
+    };
+
+    const logout = async () => {
+        if (!auth) {
+            console.error("FirebaseContext: Auth instance is null during logout attempt.");
+            throw new Error("Firebase Auth not initialized.");
+        }
+        console.log("FirebaseContext: Attempting to log out.");
+        return await signOut(auth);
+    };
+
+
     useEffect(() => {
         let firebaseAppInstance;
         let authInstance;
         let dbInstance;
 
         try {
-            if (!firebaseConfig.apiKey) { 
+            if (!firebaseConfig.apiKey) {
                 console.error("Firebase config is incomplete. Please update src/context/FirebaseContext.jsx with your actual Firebase project details.");
-                setIsAuthReady(true); 
+                setIsAuthReady(true);
                 return;
             }
 
@@ -61,36 +93,25 @@ export const FirebaseProvider = ({ children }) => {
             dbInstance = getFirestore(firebaseAppInstance);
             setDb(dbInstance);
 
-            const signInUser = async () => {
-                try {
-                    // Signing in anonymously allows unauthenticated users to browse.
-                    await signInAnonymously(authInstance);
-                    console.log("Signed in anonymously for initial access.");
-                } catch (error) {
-                    console.error("Firebase initial anonymous authentication failed:", error);
-                } finally {
-                    setIsAuthReady(true); 
-                }
-            };
-
-            signInUser();
+            // Removed the signInUser() function call and its definition
+            // as it was causing auth/admin-restricted-operation error.
+            // We will now rely solely on explicit login/signup.
 
             const unsubscribe = onAuthStateChanged(authInstance, (currentUser) => {
                 setUser(currentUser);
-                console.log("Auth state changed. Current user:", currentUser ? currentUser.uid : "None (logged out or anonymous)");
-                setIsAuthReady(true); 
+                console.log("FirebaseContext: Auth state changed. Current user:", currentUser ? currentUser.uid : "None (logged out or anonymous)");
+                setIsAuthReady(true); // Set true once auth state is first determined
             });
 
             return () => unsubscribe();
 
         } catch (error) {
-            console.error("Failed to initialize Firebase:", error);
-            setIsAuthReady(true); 
+            console.error("FirebaseContext: Failed to initialize Firebase:", error);
+            setIsAuthReady(true);
         }
     }, []); // Empty dependency array ensures this runs once on mount
 
-    // The 'value' object is created here. APP_ID_FOR_FIRESTORE_PATHS is now correctly in scope.
-    const value = { app, auth, db, user, isAuthReady, appId: APP_ID_FOR_FIRESTORE_PATHS };
+    const value = { app, auth, db, user, isAuthReady, appId: APP_ID_FOR_FIRESTORE_PATHS, login, signup, logout };
 
     if (!isAuthReady) {
         return (

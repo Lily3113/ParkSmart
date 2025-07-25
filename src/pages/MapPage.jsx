@@ -7,14 +7,15 @@ import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faTimes, faCheckCircle, faParking, faClock, faDollarSign,
-    faMobileAlt, faMoneyBillWave, faCreditCard, faSpinner, faEuroSign, faTimesCircle
+    faMoneyBillWave, faSpinner, faTimesCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 import { useFirebase } from '../context/FirebaseContext';
 import { collection, query, where, getDocs, addDoc, updateDoc, doc, onSnapshot } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 
-// Fix for default Leaflet icons
+
+// Fix for default Leaflet icons not showing correctly with Webpack
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
@@ -22,7 +23,7 @@ L.Icon.Default.mergeOptions({
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Custom Icon definitions
+// Custom Icon definitions for different spot statuses
 const availableIcon = new L.DivIcon({
     className: 'custom-div-icon available-marker',
     html: `<div class="marker-pin available-pin"></div><i class="fa fa-parking marker-icon"></i>`,
@@ -44,7 +45,8 @@ const bookedIcon = new L.DivIcon({
     iconAnchor: [15, 42]
 });
 
-const USD_TO_ZWL_RATE = 40;
+// Define the exchange rate
+const USD_TO_ZWL_RATE = 40; // $1 USD = 40 ZWL
 
 const MapPage = ({ navigateTo, showModal }) => {
     const { db, user, isAuthReady, appId } = useFirebase();
@@ -67,7 +69,7 @@ const MapPage = ({ navigateTo, showModal }) => {
     const handleResize = useCallback(() => {
         if (leafletMapRef.current) {
             leafletMapRef.current.invalidateSize();
-            console.log("Map invalidateSize called on window resize.");
+            console.log("MapPage: Map invalidateSize called on window resize.");
         }
     }, []);
 
@@ -110,13 +112,14 @@ const MapPage = ({ navigateTo, showModal }) => {
             setShowPaymentModal(false);
             setPhoneNumber('');
             setUserEnteredAmount(convertAmount(spot.priceUSD, 'USD', selectedCurrency).toFixed(2));
-            console.log(`Marker clicked: ${spot.id}, Status: ${spot.status}`);
+            console.log(`MapPage: Marker clicked: ${spot.id}, Status: ${spot.status}`);
         }
     }, [spots, selectedCurrency, convertAmount]);
 
 
     // --- Effect for Map Initialization ---
     useEffect(() => {
+        console.log("MapPage: Map initialization effect running."); // ADDED LOG
         if (mapRef.current && !leafletMapRef.current) {
             leafletMapRef.current = L.map(mapRef.current, {
                 center: [-19.0154, 29.1549],
@@ -127,7 +130,7 @@ const MapPage = ({ navigateTo, showModal }) => {
                     })
                 ]
             });
-            console.log("Leaflet map initialized!");
+            console.log("MapPage: Leaflet map initialized!"); // ADDED LOG
 
             window.leafletMapRef = leafletMapRef;
             leafletMapRef.current.invalidateSize();
@@ -136,10 +139,11 @@ const MapPage = ({ navigateTo, showModal }) => {
         }
 
         return () => {
-            if (leafletMapRef.current) {
-                leafletMapRef.current.remove();
+            const currentMap = leafletMapRef.current;
+            if (currentMap) {
+                currentMap.remove();
                 leafletMapRef.current = null;
-                console.log("Leaflet map cleaned up.");
+                console.log("MapPage: Leaflet map cleaned up."); // ADDED LOG
                 delete window.leafletMapRef;
             }
             Object.values(intervalRefs.current).forEach(intervalId => clearInterval(intervalId));
@@ -150,22 +154,22 @@ const MapPage = ({ navigateTo, showModal }) => {
 
     // --- Effect for Fetching Spots from Firestore ---
     useEffect(() => {
-        console.log("Attempting to fetch spots. db:", db, "appId:", appId, "isAuthReady:", isAuthReady); // ADDED LOG
+        console.log("MapPage: Attempting to fetch spots. db:", db, "appId:", appId, "isAuthReady:", isAuthReady);
         if (!db || !appId || !isAuthReady) {
-            console.log("Firestore or App ID not ready, or Auth not ready. Skipping spot fetch.");
+            console.log("MapPage: Firestore or App ID not ready, or Auth not ready. Skipping spot fetch.");
             return;
         }
 
         const fetchSpots = async () => {
             try {
                 const spotsCollectionRef = collection(db, `artifacts/${appId}/public/data/parkingSpots`);
-                console.log("Fetching from path:", `artifacts/${appId}/public/data/parkingSpots`); // ADDED LOG
+                console.log("MapPage: Fetching from path:", `artifacts/${appId}/public/data/parkingSpots`);
                 const q = query(spotsCollectionRef);
                 const querySnapshot = await getDocs(q);
                 const fetchedSpots = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
                 if (fetchedSpots.length === 0) {
-                    console.warn("No parking spots found in Firestore. Using dummy data.");
+                    console.warn("MapPage: No parking spots found in Firestore. Using dummy data.");
                     const dummySpots = [
                         { id: 'H1', lat: -17.8287, lng: 31.0534, status: 'available', priceUSD: 2.50, name: 'Harare CBD Parking' },
                         { id: 'H2', lat: -17.8350, lng: 31.0450, status: 'available', priceUSD: 3.00, name: 'Samora Machel Ave Lot' },
@@ -180,10 +184,11 @@ const MapPage = ({ navigateTo, showModal }) => {
                 } else {
                     setSpots(fetchedSpots);
                 }
-                console.log("Successfully fetched parking spots:", fetchedSpots); // ADDED LOG
+                console.log("MapPage: Successfully fetched parking spots:", fetchedSpots);
             } catch (error) {
-                console.error("Error fetching parking spots from Firestore:", error); // IMPROVED LOG
-                showModal("Failed to load parking spots. Using dummy data as fallback.", "error");
+                console.error("MapPage: Error fetching parking spots from Firestore:", error); // IMPROVED LOG
+                // This is the error that triggers the modal:
+                showModal(`Failed to load parking spots. Using dummy data as fallback. Error: ${error.message}`, "error"); // ADDED ERROR MESSAGE TO MODAL
                 setSpots([
                     { id: 'H1', lat: -17.8287, lng: 31.0534, status: 'available', priceUSD: 2.50, name: 'Harare CBD Parking' },
                     { id: 'H2', lat: -17.8350, lng: 31.0450, status: 'available', priceUSD: 3.00, name: 'Samora Machel Ave Lot' },
@@ -197,8 +202,9 @@ const MapPage = ({ navigateTo, showModal }) => {
 
     // --- Effect for Listening to User Bookings (Real-time) and Managing Timers ---
     useEffect(() => {
+        console.log("MapPage: Attempting to set up booking listener. db:", db, "user:", user, "appId:", appId, "isAuthReady:", isAuthReady); // ADDED LOG
         if (!db || !user || !appId || !isAuthReady) {
-            console.log("Firestore, user, or App ID not ready, or Auth not ready. Skipping booking listener.");
+            console.log("MapPage: Firestore, user, or App ID not ready, or Auth not ready. Skipping booking listener.");
             Object.values(intervalRefs.current).forEach(intervalId => clearInterval(intervalId));
             intervalRefs.current = {};
             setActiveBookingTimers({});
@@ -208,9 +214,10 @@ const MapPage = ({ navigateTo, showModal }) => {
         const userBookingsRef = collection(db, `artifacts/${appId}/users/${user.uid}/bookings`);
         const q = query(userBookingsRef, where("status", "==", "active"));
 
-        console.log(`Setting up real-time listener for user ${user.uid}'s active bookings.`);
+        console.log(`MapPage: Setting up real-time listener for user ${user.uid}'s active bookings.`);
 
         const unsubscribe = onSnapshot(q, (snapshot) => {
+            console.log("MapPage: Booking snapshot received."); // ADDED LOG
             const now = Date.now();
             const currentActiveBookingsMap = {};
             const newTimersMap = {};
@@ -223,9 +230,9 @@ const MapPage = ({ navigateTo, showModal }) => {
                     currentActiveBookingsMap[booking.spotId] = booking;
                     newTimersMap[booking.spotId] = Math.max(0, Math.round((endTimeMs - now) / 1000));
                 } else {
-                    console.log(`Booking ${booking.id} for spot ${booking.spotId} has expired. Updating Firestore.`);
+                    console.log(`MapPage: Booking ${booking.id} for spot ${booking.spotId} has expired. Updating Firestore.`);
                     updateDoc(doc(db, `artifacts/${appId}/users/${user.uid}/bookings`, booking.id), { status: 'expired' })
-                        .catch(error => console.error("Error updating expired booking status:", error));
+                        .catch(error => console.error("MapPage: Error updating expired booking status:", error)); // ADDED LOG
                 }
             });
 
@@ -255,7 +262,7 @@ const MapPage = ({ navigateTo, showModal }) => {
                                 clearInterval(intervalRefs.current[spotId]);
                                 delete intervalRefs.current[spotId];
                                 delete updatedTimers[spotId];
-                                console.log(`Timer for spot ${spotId} finished.`);
+                                console.log(`MapPage: Timer for spot ${spotId} finished.`);
                                 showModal(`Your booking for ${currentActiveBookingsMap[spotId].spotName} (${spotId}) has ended.`, "info");
                             } else {
                                 updatedTimers[spotId] = remainingSeconds;
@@ -267,8 +274,8 @@ const MapPage = ({ navigateTo, showModal }) => {
             });
             setActiveBookingTimers(newTimersMap);
         }, (error) => {
-            console.error("Error listening to user bookings:", error);
-            showModal("Failed to load your active bookings.", "error");
+            console.error("MapPage: Error listening to user bookings:", error); // IMPROVED LOG
+            showModal(`Failed to load your active bookings. Error: ${error.message}`, "error"); // ADDED ERROR MESSAGE TO MODAL
         });
 
         return () => {
@@ -276,13 +283,14 @@ const MapPage = ({ navigateTo, showModal }) => {
             Object.values(intervalRefs.current).forEach(intervalId => clearInterval(intervalId));
             intervalRefs.current = {};
             setActiveBookingTimers({});
-            console.log("User bookings listener unsubscribed and timers cleared.");
+            console.log("MapPage: User bookings listener unsubscribed and timers cleared."); // ADDED LOG
         };
     }, [db, user, appId, isAuthReady, showModal]);
 
 
     // --- Effect to add/update markers when spots state changes ---
     useEffect(() => {
+        console.log("MapPage: Markers update effect running. Spots count:", spots.length); // ADDED LOG
         if (!leafletMapRef.current || spots.length === 0) {
             return;
         }
@@ -318,12 +326,13 @@ const MapPage = ({ navigateTo, showModal }) => {
             }
         });
         markerRefs.current = updatedMarkerRefs;
-        console.log("Markers updated/drawn.");
+        console.log("MapPage: Markers updated/drawn.");
     }, [spots, selectedSpot, handleMarkerClick]);
 
     const handleBookSpot = () => {
+        console.log("MapPage: handleBookSpot called."); // ADDED LOG
         if (!user) {
-            showModal("You must be logged in to book a spot. Please sign in or create an account.", "info", () => navigateTo('/login')); // Changed navigateTo('login') to navigateTo('/login')
+            showModal("You must be logged in to book a spot. Please sign in or create an account.", "info", () => navigateTo('/login'));
             return;
         }
 
@@ -334,6 +343,7 @@ const MapPage = ({ navigateTo, showModal }) => {
     };
 
     const handleCurrencyChange = useCallback((e) => {
+        console.log("MapPage: handleCurrencyChange called. New currency:", e.target.value); // ADDED LOG
         const newCurrency = e.target.value;
         if (selectedSpot) {
             let converted;
@@ -345,11 +355,11 @@ const MapPage = ({ navigateTo, showModal }) => {
             setUserEnteredAmount(converted.toFixed(2));
         }
         setSelectedCurrency(newCurrency);
-    }, [selectedSpot, convertAmount]);
+    }, [selectedSpot, USD_TO_ZWL_RATE]);
 
     const handlePaymentSubmit = async (e) => {
         e.preventDefault();
-        console.log("handlePaymentSubmit called.");
+        console.log("MapPage: handlePaymentSubmit called."); // ADDED LOG
 
         if (!user) {
             showModal("You must be logged in to complete payment.", "error");
@@ -361,7 +371,7 @@ const MapPage = ({ navigateTo, showModal }) => {
         }
 
         if (!selectedSpot || selectedSpot.status !== 'available') {
-            console.error("Payment attempted but no available spot is selected or spot is already booked!");
+            console.error("MapPage: Payment attempted but no available spot is selected or spot is already booked!"); // IMPROVED LOG
             showModal("Error: Please select an available spot to book.", "error");
             setShowPaymentModal(false);
             setSelectedSpot(null);
@@ -422,21 +432,22 @@ const MapPage = ({ navigateTo, showModal }) => {
                 setShowPaymentModal(false);
                 setPhoneNumber('');
                 setUserEnteredAmount('');
-                console.log(`Spot ${selectedSpot.id} booked via ${selectedPaymentMethod} and added to Firestore.`);
+                console.log(`MapPage: Spot ${selectedSpot.id} booked via ${selectedPaymentMethod} and added to Firestore.`); // ADDED LOG
 
             } else {
                 showModal("Payment failed. Please try again.", "error");
-                console.log("Payment failed (simulated).");
+                console.log("MapPage: Payment failed (simulated)."); // ADDED LOG
             }
         } catch (error) {
-            console.error("Error during payment or booking:", error);
-            showModal(`An unexpected error occurred: ${error.message}`, "error");
+            console.error("MapPage: Error during payment or booking:", error); // IMPROVED LOG
+            showModal(`An unexpected error occurred during payment: ${error.message}`, "error"); // ADDED ERROR MESSAGE TO MODAL
         } finally {
             setPaymentLoading(false);
         }
     };
 
     const handleCancelBooking = async () => {
+        console.log("MapPage: handleCancelBooking called."); // ADDED LOG
         if (!user || !db) {
             showModal("You must be logged in and database ready to cancel a booking.", "error");
             return;
@@ -457,14 +468,15 @@ const MapPage = ({ navigateTo, showModal }) => {
                         const bookingDocRef = doc(db, `artifacts/${appId}/users/${user.uid}/bookings`, bookingDoc.id);
                         await updateDoc(bookingDocRef, { status: 'cancelled', cancelledAt: new Date().toISOString() });
                         showModal(`Booking for ${selectedSpot.id} has been cancelled.`, "success");
-                        console.log(`Booking for ${selectedSpot.id} cancelled in Firestore.`);
+                        console.log(`MapPage: Booking for ${selectedSpot.id} cancelled in Firestore.`); // ADDED LOG
                     } else {
                         showModal("No active booking found for this spot.", "info");
+                        console.log("MapPage: No active booking found for cancellation."); // ADDED LOG
                     }
                     setSelectedSpot(null);
                 } catch (error) {
-                    console.error("Error cancelling booking:", error);
-                    showModal(`Failed to cancel booking: ${error.message}`, "error");
+                    console.error("MapPage: Error cancelling booking:", error); // IMPROVED LOG
+                    showModal(`Failed to cancel booking: ${error.message}`, "error"); // ADDED ERROR MESSAGE TO MODAL
                 }
             });
         }
@@ -510,7 +522,7 @@ const MapPage = ({ navigateTo, showModal }) => {
                             <button
                                 className="btn btn-primary ripple-effect"
                                 onClick={handleBookSpot}
-                                disabled={!isAuthReady || !user} // Disable if auth not ready or not logged in
+                                disabled={!isAuthReady || !user}
                             >
                                 {isAuthReady && !user ? 'Login to Book' : 'Book This Spot'}
                             </button>
@@ -527,7 +539,7 @@ const MapPage = ({ navigateTo, showModal }) => {
                                 </button>
                             </div>
                         )}
-                        {!user && isAuthReady && ( // Show login/signup prompt if not logged in and auth is ready
+                        {!user && isAuthReady && (
                             <p className="login-prompt-message">
                                 Please <Link to="/login">login</Link> or <Link to="/signup">sign up</Link> to book a spot.
                             </p>

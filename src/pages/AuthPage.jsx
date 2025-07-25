@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useFirebase } from '../context/FirebaseContext';
-import { useNavigate } from 'react-router-dom'; // No need for <Link> here, as we're toggling modes
-import '../App.css'; // Import the shared CSS
+import { useNavigate } from 'react-router-dom';
+import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 
@@ -52,27 +52,41 @@ const AuthPage = () => {
 
         try {
             if (isLoginMode) {
-                // Login logic
                 await login(email, password);
             } else {
-                // Signup logic
                 await signup(email, password);
             }
-            // User will be redirected by the useEffect hook if successful
         } catch (err) {
-            console.error(`${isLoginMode ? 'Login' : 'Signup'} error:`, err.message);
-            if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-                setError('Invalid email or password. Please try again.');
-            } else if (err.code === 'auth/invalid-email') {
-                setError('Please enter a valid email address.');
-            } else if (err.code === 'auth/too-many-requests') {
-                setError('Too many failed attempts. Please try again later.');
-            } else if (err.code === 'auth/email-already-in-use') {
-                setError('This email is already in use. Please use a different email or login.');
-            } else if (err.code === 'auth/weak-password') {
-                setError('Password is too weak. Please choose a stronger password.');
+            // =================================================================
+            // THIS IS THE CRITICAL LOGGING LINE.
+            // It will print the Firebase error code and message to your browser console.
+            // Using a more robust way to access properties in case 'err' is not a standard Error object.
+            console.error(
+                `AuthPage: Firebase Auth Error:`,
+                err && typeof err === 'object' ? err.code || 'No Code' : 'Unknown Error Code',
+                err && typeof err === 'object' ? err.message || 'No Message' : String(err), // String(err) for non-object errors
+                err // Log the entire error object for full details
+            );
+            // =================================================================
+
+            // Use the err.code for specific error messages
+            if (err && typeof err === 'object' && err.code) { // Check if err.code exists
+                if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+                    setError('Invalid email or password. Please try again.');
+                } else if (err.code === 'auth/invalid-email') {
+                    setError('Please enter a valid email address.');
+                } else if (err.code === 'auth/too-many-requests') {
+                    setError('Too many failed attempts. Please try again later.');
+                } else if (err.code === 'auth/email-already-in-use') {
+                    setError('This email is already in use. Please use a different email or login.');
+                } else if (err.code === 'auth/weak-password') {
+                    setError('Password is too weak. Please choose a stronger password.');
+                } else {
+                    setError(`Failed to ${isLoginMode ? 'login' : 'create account'}. Please try again.`);
+                }
             } else {
-                setError(`Failed to ${isLoginMode ? 'login' : 'create account'}. Please try again.`);
+                // Fallback for unexpected error types (like "p is not a function")
+                setError(`An unexpected error occurred: ${err ? err.message || String(err) : 'Unknown error'}. Please try again.`);
             }
         } finally {
             setLoading(false);
@@ -94,7 +108,7 @@ const AuthPage = () => {
             <div className="auth-form-card">
                 <div className="auth-logo-container">
                     <div className="auth-logo">
-                        <img src="/images/logo.png" alt="Web Dev Logo" /> {/* Replace with your actual logo URL */}
+                        <img src="/images/logo.png" alt="Web Dev Logo" />
                     </div>
                     <p className="auth-slogan">Your hassle-free parking solution.</p>
                     <p className="auth-tagline">Made easy!</p>
@@ -129,7 +143,7 @@ const AuthPage = () => {
                         </div>
                     </div>
 
-                    {!isLoginMode && ( // Only show confirm password in signup mode
+                    {!isLoginMode && (
                         <div className="form-group">
                             <div className="input-wrapper">
                                 <FontAwesomeIcon icon={faLock} className="input-icon" />

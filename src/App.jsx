@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 
 // Context Provider
-import { FirebaseProvider, useFirebase } from './context/FirebaseContext'; // NEW: Import useFirebase here too
+import { FirebaseProvider, useFirebase } from './context/FirebaseContext';
 
 // Layout Components
 import Navbar from './components/Navbar';
@@ -22,6 +22,16 @@ import AuthPage from './pages/AuthPage';
 import MapPage from './pages/MapPage';
 import ProfilePage from './pages/ProfilePage';
 import ChangeAvatarPage from './pages/ChangeAvatarPage';
+import SettingsPage from './pages/SettingsPage';
+
+// Import ALL Settings Sub-Page Components
+import AccountSettings from './pages/settings/AccountSettings';
+import ChatSettings from './pages/settings/ChatSettings';
+import NotificationSettings from './pages/settings/NotificationSettings';
+import StorageDataSettings from './pages/settings/StorageDataSettings';
+import HelpSettings from './pages/settings/HelpSettings';
+import InviteFriend from './pages/settings/InviteFriend';
+import WallpaperSettings from './pages/settings/WallpaperSettings'; // <-- CORRECTED: Added WallpaperSettings import
 
 // Import the PrivateRoute component
 import PrivateRoute from './components/PrivateRoute';
@@ -31,8 +41,7 @@ import './App.css';
 
 const AppContent = () => {
     const navigate = useNavigate();
-    // NEW: Get user and isAuthReady from FirebaseContext
-    const { user, isAuthReady } = useFirebase(); // Make sure this line is present
+    const { user, isAuthReady } = useFirebase(); // Get user and isAuthReady from FirebaseContext
 
     // Initialize local user state based on Firebase user or a default
     const [localUser, setLocalUser] = useState(() => ({
@@ -49,18 +58,14 @@ const AppContent = () => {
     }));
 
     // Effect to update localUser state when the Firebase user changes
-    // This is important because the Firebase user object might become available
-    // AFTER the initial render, or change (e.g., login/logout).
     React.useEffect(() => {
         if (user) {
-            setLocalUser({
-                name: user.displayName || 'ParkSmart User',
-                avatar: user.photoURL || '/images/pd.jpeg',
-                username: user.email ? `@${user.email.split('@')[0]}` : '@parksmartuser',
-                about: localUser.about, // Keep existing if not updated by Firebase
-                phone: localUser.phone,
-                links: localUser.links
-            });
+            setLocalUser(prevLocalUser => ({ // <--- IMPORTANT: Using functional update to preserve prevLocalUser
+                ...prevLocalUser, // Keep existing local user data (like about, phone, links)
+                name: user.displayName || prevLocalUser.name || 'ParkSmart User', // Prioritize Firebase, then prev, then default
+                avatar: user.photoURL || prevLocalUser.avatar || '/images/pd.jpeg', // Prioritize Firebase, then prev, then default
+                username: user.email ? `@${user.email.split('@')[0]}` : prevLocalUser.username || '@parksmartuser', // Prioritize Firebase, then prev, then default
+            }));
         } else {
             // If user logs out, reset to default or anonymous state
             setLocalUser({
@@ -93,13 +98,14 @@ const AppContent = () => {
     };
 
     const navigateTo = (path) => {
+        console.log("Navigating to:", path); // Added for debugging
         navigate(path);
         window.scrollTo(0, 0);
     };
 
     const handleAvatarChange = (newAvatarUrl) => {
         setLocalUser(prevUser => ({ ...prevUser, avatar: newAvatarUrl }));
-        console.log(`Avatar changed to: ${newAvatarUrl}`);
+        console.log(`App.jsx: Local avatar state updated to: ${newAvatarUrl}`);
     };
 
     // ====================================================================
@@ -110,7 +116,6 @@ const AppContent = () => {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontSize: '1.5rem', color: 'var(--ps-dark-blue)', flexDirection: 'column' }}>
                 <p>Initializing application...</p>
-                {/* You can add a spinner here */}
                 <div className="loading-spinner"></div> {/* Add CSS for a loading spinner */}
             </div>
         );
@@ -125,7 +130,7 @@ const AppContent = () => {
             <main>
                 <Routes>
                     {/* Public Routes */}
-                    <Route path="/" element={<HomePage />} />
+                    <Route path="/" element={<HomePage navigateTo={navigateTo} />} />
                     <Route path="/about-us" element={<AboutUsDetails navigateTo={navigateTo} />} />
                     <Route path="/faq" element={<FAQSection navigateTo={navigateTo} />} />
                     <Route path="/contact" element={<ContactUsPage navigateTo={navigateTo} />} />
@@ -140,20 +145,21 @@ const AppContent = () => {
                     {/* ============================================== */}
                     <Route element={<PrivateRoute />}>
                         <Route path="/map" element={<MapPage showModal={showModal} navigateTo={navigateTo} />} />
-                        <Route path="/profile" element={<ProfilePage navigateTo={navigateTo} user={localUser} setUser={setLocalUser} />} /> {/* Pass localUser */}
+                        <Route path="/profile" element={<ProfilePage navigateTo={navigateTo} user={localUser} setUser={setLocalUser} />} />
                         <Route path="/change-avatar" element={<ChangeAvatarPage
                             navigateTo={navigateTo}
                             onAvatarChange={handleAvatarChange}
                             currentAvatar={localUser.avatar}
                         />} />
-                        {/* Protect other "Coming Soon" pages as needed */}
-                        <Route path="/settings" element={<div style={{ padding: '5rem', textAlign: 'center' }}><h1>Settings Page (Coming Soon!)</h1><button className="btn btn-primary ripple-effect" onClick={() => navigateTo('/')}>Back to Home</button></div>} />
-                        <Route path="/account-settings" element={<div style={{ padding: '5rem', textAlign: 'center' }}><h1>Account Settings (Coming Soon!)</h1><button className="btn btn-primary ripple-effect" onClick={() => navigateTo('/profile')}>Back to Profile</button></div>} />
-                        <Route path="/chat-settings" element={<div style={{ padding: '5rem', textAlign: 'center' }}><h1>Chat Settings (Coming Soon!)</h1><button className="btn btn-primary ripple-effect" onClick={() => navigateTo('/profile')}>Back to Profile</button></div>} />
-                        <Route path="/notification-settings" element={<div style={{ padding: '5rem', textAlign: 'center' }}><h1>Notification Settings (Coming Soon!)</h1><button className="btn btn-primary ripple-effect" onClick={() => navigateTo('/profile')}>Back to Profile</button></div>} />
-                        <Route path="/storage-settings" element={<div style={{ padding: '5rem', textAlign: 'center' }}><h1>Storage and Data (Coming Soon!)</h1><button className="btn btn-primary ripple-effect" onClick={() => navigateTo('/profile')}>Back to Profile</button></div>} />
-                        <Route path="/help-center" element={<div style={{ padding: '5rem', textAlign: 'center' }}><h1>Help Center (Coming Soon!)</h1><button className="btn btn-primary ripple-effect" onClick={() => navigateTo('/profile')}>Back to Profile</button></div>} />
-                        <Route path="/invite-friend" element={<div style={{ padding: '5rem', textAlign: 'center' }}><h1>Invite a Friend (Coming Soon!)</h1><button className="btn btn-primary ripple-effect" onClick={() => navigateTo('/profile')}>Back to Profile</button></div>} />
+                        {/* NEW: Settings Page and its Sub-Pages */}
+                        <Route path="/settings" element={<SettingsPage navigateTo={navigateTo} />} />
+                        <Route path="/settings/account" element={<AccountSettings navigateTo={navigateTo} />} />
+                        <Route path="/settings/chats" element={<ChatSettings navigateTo={navigateTo} />} />
+                        <Route path="/settings/notifications" element={<NotificationSettings navigateTo={navigateTo} />} />
+                        <Route path="/settings/storage-data" element={<StorageDataSettings navigateTo={navigateTo} />} />
+                        <Route path="/settings/help" element={<HelpSettings navigateTo={navigateTo} />} />
+                        <Route path="/settings/invite-friend" element={<InviteFriend navigateTo={navigateTo} />} />
+                        <Route path="/settings/wallpapers" element={<WallpaperSettings navigateTo={navigateTo} />} /> {/* <-- CORRECTED: Added WallpaperSettings route */}
                     </Route>
                     {/* ============================================== */}
 

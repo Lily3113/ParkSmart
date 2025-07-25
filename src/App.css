@@ -3651,3 +3651,704 @@ body {
         font-size: 0.8rem;
     }
 }
+
+/* src/App.css - Append these rules */
+
+/* ChangeAvatarPage Styling */
+/* ======================================================================= */
+.change-avatar-section {
+    padding: 40px 20px;
+    background-color: var(--ps-light-gray);
+    min-height: calc(100vh - var(--navbar-height) - var(--footer-height));
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Changed to center for vertical centering of the container */
+    flex-direction: column; /* Added to ensure vertical stacking and align-items: center works */
+}
+
+.change-avatar-container {
+    background-color: var(--ps-white); /* Card background */
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: var(--neumorphic-shadow); /* Card shadow */
+    text-align: center;
+    max-width: 800px;
+    width: 100%;
+    margin-top: 50px; /* Space from navbar */
+    margin-bottom: 50px; /* Added space at the bottom to prevent clipping by footer */
+    box-sizing: border-box; /* IMPORTANT: Ensures padding/border are included in width */
+    margin-left: auto; /* Ensures horizontal centering */
+    margin-right: auto; /* Ensures horizontal centering */
+    min-width: 0; /* Allows the container to shrink below its content's intrinsic size if needed */
+}
+
+.change-avatar-container h2 {
+    color: var(--ps-dark-blue);
+    margin-bottom: 25px;
+    font-size: 2em;
+    font-weight: 700;
+}
+
+.current-avatar-preview {
+    margin-bottom: 30px;
+}
+
+.current-avatar-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--primary-color);
+    box-shadow: var(--neumorphic-shadow-inset);
+    transition: all 0.3s ease;
+}
+
+.current-avatar-preview p {
+    color: var(--ps-medium-gray);
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+.message-box {
+    padding: 12px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.95em;
+    gap: 10px;
+}
+
+.message-box.success {
+    background-color: #e6ffe6;
+    color: #28a745;
+    border: 1px solid #28a745;
+}
+
+.message-box.error {
+    background-color: #ffe6e6;
+    color: #dc3545;
+    border: 1px solid #dc3545;
+}
+
+.message-box svg {
+    font-size: 1.2em;
+}
+
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Responsive grid */
+    gap: 20px;
+    margin-bottom: 30px;
+    max-width: 100%; /* Ensures the grid doesn't overflow its parent horizontally */
+    min-width: 0; /* Allows grid to shrink properly on small screens */
+}
+
+.avatar-option {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden; /* CRITICAL: Clips content outside the circle */
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.2s ease-in-out;
+    display: flex; /* For centering the image/content */
+    justify-content: center;
+    align-items: center;
+    background-color: var(--ps-white); /* Card background */
+    box-shadow: var(--neumorphic-shadow); /* Card shadow */
+    position: relative; /* IMPORTANT: For absolute positioning of img */
+}
+
+.avatar-option img {
+    width: 100%; /* Make image fill the container */
+    height: 100%; /* Make image fill the container */
+    border-radius: 50%; /* Keep image circular */
+    object-fit: cover; /* Ensures image covers the area without distortion */
+    transition: transform 0.2s ease-in-out;
+    position: absolute; /* IMPORTANT: Position image absolutely within the option */
+    top: 0;
+    left: 0;
+
+    /* Rules to hide broken image alt text */
+    color: transparent;
+    font-size: 0;
+    text-indent: -9999px; /* Push text far away */
+}
+
+/* This rule hides any explicit span for alt text, but the img rules above are more robust */
+.avatar-option span {
+    display: none;
+}
+
+.avatar-option:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--neumorphic-shadow-hover);
+}
+
+.avatar-option.selected {
+    border-color: var(--primary-color);
+    box-shadow: var(--neumorphic-shadow-inset-active); /* Active state shadow */
+    transform: scale(1.05);
+}
+
+.avatar-option.selected img {
+    transform: scale(0.95);
+}
+
+.avatar-actions {
+    display: flex;
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Loading state for ChangeAvatarPage */
+.change-avatar-container.loading-state,
+.change-avatar-container.not-logged-in {
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.change-avatar-container.not-logged-in .btn {
+    margin-top: 15px;
+}
+
+/* ======================================================================= */
+/* SettingsPage Styling */
+/* ======================================================================= */
+.settings-page-section {
+    padding: 40px 20px;
+    background-color: var(--ps-light-gray);
+    min-height: calc(100vh - var(--navbar-height) - var(--footer-height)); /* Adjust based on your header/footer heights */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.settings-container {
+    background-color: var(--ps-white);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: var(--neumorphic-shadow);
+    max-width: 900px;
+    width: 100%;
+    margin-top: 50px;
+}
+
+.settings-container h2 {
+    color: var(--ps-dark-blue);
+    margin-bottom: 15px;
+    font-size: 2.2em;
+    font-weight: 700;
+    text-align: center;
+}
+
+.settings-description {
+    color: var(--ps-medium-gray);
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.settings-options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid for cards */
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.setting-card {
+    background-color: var(--ps-white);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: var(--neumorphic-shadow);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 150px; /* Ensure cards have some height */
+}
+
+.setting-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--neumorphic-shadow-hover);
+}
+
+.setting-card h3 {
+    color: var(--primary-color);
+    font-size: 1.4em;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.setting-card p {
+    color: var(--ps-dark-gray);
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+.settings-footer {
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .change-avatar-container,
+    .settings-container {
+        padding: 20px;
+        margin-top: 30px;
+    }
+
+    .change-avatar-container h2,
+    .settings-container h2 {
+        font-size: 1.8em;
+    }
+
+    .avatar-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 15px;
+    }
+
+    .avatar-option {
+        width: 80px;
+        height: 80px;
+    }
+
+    .settings-options-grid {
+        grid-template-columns: 1fr; /* Stack cards on small screens */
+    }
+}
+
+/* Assuming you have these CSS variables defined elsewhere, e.g., at :root or in a variables.css */
+/* Example variables (add these if you don't have them, or adjust to your existing ones) */
+:root {
+    --primary-color: #007bff; /* Example blue */
+    --secondary-color: #6c757d; /* Example gray */
+    --ps-dark-blue: #2c3e50; /* Darker blue for text/headings */
+    --ps-medium-gray: #7f8c8d; /* Medium gray for descriptions */
+    --ps-light-gray: #ecf0f1; /* Light background gray */
+    --ps-white: #ffffff;
+    --ps-dark-gray: #34495e;
+
+    /* Neumorphic shadows - adjust these to match your AuthPage if different */
+    --neumorphic-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px rgba(255, 255, 255, 0.8);
+    --neumorphic-shadow-hover: 7px 7px 14px rgba(0, 0, 0, 0.15), -7px -7px 14px rgba(255, 255, 255, 0.9);
+    --neumorphic-shadow-inset: inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -2px -2px 5px rgba(255, 255, 255, 0.7);
+    --neumorphic-shadow-inset-active: inset 3px 3px 7px rgba(0, 0, 0, 0.2), inset -3px -3px 7px rgba(255, 255, 255, 0.9);
+
+    --navbar-height: 60px; /* Adjust if your navbar height is different */
+    --footer-height: 80px; /* Adjust if your footer height is different */
+}
+
+/* Basic button styles (ensure these are consistent with your existing buttons) */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    text-decoration: none; /* For Link/button consistency */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--ps-white);
+    box-shadow: var(--neumorphic-shadow);
+}
+
+.btn-primary:hover {
+    background-color: darken(var(--primary-color), 10%); /* Requires SASS/LESS or manual color */
+    box-shadow: var(--neumorphic-shadow-hover);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: var(--ps-white);
+    box-shadow: var(--neumorphic-shadow);
+}
+
+.btn-secondary:hover {
+    background-color: darken(var(--secondary-color), 10%); /* Requires SASS/LESS or manual color */
+    box-shadow: var(--neumorphic-shadow-hover);
+}
+
+/* Ripple effect (if you have it, ensure it's defined) */
+.ripple-effect {
+    position: relative;
+    overflow: hidden;
+    transform: translate3d(0, 0, 0);
+}
+
+.ripple-effect:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform .5s, opacity 1s;
+}
+
+.ripple-effect:active:after {
+    transform: scale(0, 0);
+    opacity: .2;
+    transition: 0s;
+}
+
+/* In App.css, add this under SettingsPage Styling or similar */
+.settings-content {
+    margin-top: 30px;
+}
+
+.settings-content .setting-item {
+    background-color: var(--ps-light-gray);
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    text-align: left;
+    box-shadow: var(--neumorphic-shadow-inset);
+    transition: all 0.2s ease;
+    cursor: default; /* Not clickable like cards, so default cursor */
+}
+
+.settings-content .setting-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--neumorphic-shadow-hover);
+}
+
+.settings-content .setting-item h3 {
+    color: var(--ps-dark-blue);
+    font-size: 1.1em;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.settings-content .setting-item p {
+    color: var(--ps-medium-gray);
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+/* src/App.css - Add these styles */
+
+/* ======================================================================= */
+/* ChatSettings Specific Styles */
+/* ======================================================================= */
+
+/* Styles for the theme toggle switch */
+.theme-toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.theme-toggle-container span {
+    color: var(--ps-dark-gray);
+    font-weight: 500;
+}
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--ps-medium-gray); /* Off state color */
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: var(--ps-white); /* Knob color */
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--primary-color); /* On state color */
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--primary-color);
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #2c2c2c; /* Dark background */
+    color: #f0f0f0; /* Light text */
+}
+
+body.dark-mode .navbar-container,
+body.dark-mode .settings-container,
+body.dark-mode .auth-form-card,
+body.dark-mode .booking-modal,
+body.dark-mode .payment-modal,
+body.dark-mode .profile-container,
+body.dark-mode .setting-card,
+body.dark-mode .message-box,
+body.dark-mode .input-wrapper,
+body.dark-mode .avatar-option {
+    background-color: #3a3a3a; /* Darker card/element background */
+    box-shadow: 7px 7px 14px rgba(0, 0, 0, 0.4), -7px -7px 14px rgba(60, 60, 60, 0.2); /* Darker neumorphic shadow */
+}
+
+body.dark-mode .neumorphic-shadow-inset {
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.3), inset -2px -2px 5px rgba(60, 60, 60, 0.1);
+}
+
+body.dark-mode .neumorphic-shadow-inset-active {
+    box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.4), inset -3px -3px 7px rgba(60, 60, 60, 0.2);
+}
+
+body.dark-mode .navbar-brand span,
+body.dark-mode .navbar-links li button,
+body.dark-mode .auth-form-card h2,
+body.dark-mode .map-page-title,
+body.dark-mode .booking-modal h2,
+body.dark-mode .payment-modal h2,
+body.dark-mode .profile-name,
+body.dark-mode .settings-container h2,
+body.dark-mode .setting-card h3,
+body.dark-mode .settings-content .setting-item h3,
+body.dark-mode .settings-content .setting-item p,
+body.dark-mode .current-avatar-preview p,
+body.dark-mode .auth-link-text,
+body.dark-mode .auth-slogan,
+body.dark-mode .profile-info .label,
+body.dark-mode .profile-info .value,
+body.dark-mode .theme-toggle-container span {
+    color: #f0f0f0; /* Lighter text for dark mode */
+}
+
+body.dark-mode .map-page-subtitle,
+body.dark-mode .auth-tagline,
+body.dark-mode .input-wrapper input::placeholder,
+body.dark-mode .profile-username,
+body.dark-mode .settings-description {
+    color: #b0b0b0; /* Slightly darker light text */
+}
+
+body.dark-mode .input-wrapper,
+body.dark-mode .payment-form input,
+body.dark-mode .payment-form select,
+body.dark-mode .payment-form .radio-group,
+body.dark-mode .settings-content .setting-item {
+    background-color: #4a4a4a; /* Darker input/item background */
+}
+
+body.dark-mode .slider {
+    background-color: #555; /* Dark mode slider off state */
+}
+
+input:checked + .slider {
+    background-color: var(--primary-color); /* Primary color remains for 'on' state */
+}
+
+/* Adjustments for buttons in dark mode if needed */
+body.dark-mode .btn-secondary {
+    background-color: #555;
+    color: #f0f0f0;
+}
+body.dark-mode .btn-secondary:hover {
+    background-color: #666;
+}
+
+/* New styles for interactive setting items */
+.setting-item.interactive-setting {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align content to the left */
+    padding: 20px;
+    margin-bottom: 15px;
+    background-color: var(--ps-light-gray);
+    border-radius: 10px;
+    box-shadow: var(--neumorphic-shadow-inset);
+    transition: all 0.2s ease;
+}
+
+.setting-item.interactive-setting:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--neumorphic-shadow-hover);
+}
+
+.setting-item-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.setting-item-header .setting-icon {
+    font-size: 1.5em;
+    color: var(--primary-color);
+    margin-right: 15px;
+}
+
+.setting-item-header h3 {
+    margin: 0;
+    color: var(--ps-dark-blue);
+    font-size: 1.2em;
+}
+
+.setting-item.interactive-setting p {
+    color: var(--ps-medium-gray);
+    font-size: 0.95em;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.chat-history-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: 100%; /* Ensure buttons take full width if needed */
+    justify-content: center; /* Center buttons */
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Red color for danger actions */
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+
+/* src/App.css - Add these styles */
+
+/* ======================================================================= */
+/* WallpaperSettings Specific Styles */
+/* ======================================================================= */
+.wallpaper-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Responsive grid for wallpapers */
+    gap: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    max-width: 100%;
+}
+
+.wallpaper-option {
+    position: relative;
+    width: 100%;
+    padding-bottom: 75%; /* 4:3 aspect ratio (height is 75% of width) */
+    background-color: var(--ps-light-gray);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: var(--neumorphic-shadow);
+    transition: all 0.2s ease-in-out;
+}
+
+.wallpaper-option:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--neumorphic-shadow-hover);
+}
+
+.wallpaper-option img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.wallpaper-option.selected {
+    border: 3px solid var(--primary-color);
+    box-shadow: var(--neumorphic-shadow-inset-active);
+    transform: scale(1.02);
+}
+
+.wallpaper-option .selection-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 123, 255, 0.5); /* Primary color with transparency */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 2em;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+/* Dark mode adjustments for wallpapers */
+body.dark-mode .wallpaper-option {
+    background-color: #4a4a4a;
+    box-shadow: 7px 7px 14px rgba(0, 0, 0, 0.4), -7px -7px 14px rgba(60, 60, 60, 0.2);
+}
+
+body.dark-mode .wallpaper-option.selected {
+    box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.4), inset -3px -3px 7px rgba(70, 70, 70, 0.2);
+}

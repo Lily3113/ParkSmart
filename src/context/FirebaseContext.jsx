@@ -4,11 +4,11 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { initializeApp } from 'firebase/app';
 import {
     getAuth,
-    // signInAnonymously, // <--- REMOVED THIS IMPORT
     onAuthStateChanged,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
-    signOut
+    signOut,
+    updateProfile // <--- NEW: Import updateProfile
 } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
@@ -22,10 +22,6 @@ export const useFirebase = () => {
     return context;
 };
 
-// =========================================================
-// IMPORTANT: REPLACE WITH YOUR ACTUAL FIREBASE CONFIG
-// For production, consider using environment variables (e.g., process.env.REACT_APP_...)
-// rather than hardcoding.
 const firebaseConfig = {
     apiKey: "AIzaSyD-bjX-o15WoKNrx5cB4NLo4437R00FmGM",
     authDomain: "smartparking-c6d39.firebaseapp.com",
@@ -36,7 +32,6 @@ const firebaseConfig = {
     measurementId: "G-7NC6ERSWWD"
 };
 const APP_ID_FOR_FIRESTORE_PATHS = firebaseConfig.appId;
-// =========================================================
 
 export const FirebaseProvider = ({ children }) => {
     const [app, setApp] = useState(null);
@@ -72,6 +67,16 @@ export const FirebaseProvider = ({ children }) => {
         return await signOut(auth);
     };
 
+    // <--- NEW: Function to update user profile (e.g., photoURL)
+    const updateUserProfile = async (currentUser, profileUpdates) => {
+        if (!currentUser) {
+            console.error("FirebaseContext: No current user to update profile.");
+            throw new Error("No user logged in.");
+        }
+        console.log("FirebaseContext: Updating user profile for UID:", currentUser.uid, "with:", profileUpdates);
+        return await updateProfile(currentUser, profileUpdates);
+    };
+    // NEW: End of updateUserProfile
 
     useEffect(() => {
         let firebaseAppInstance;
@@ -93,14 +98,10 @@ export const FirebaseProvider = ({ children }) => {
             dbInstance = getFirestore(firebaseAppInstance);
             setDb(dbInstance);
 
-            // Removed the signInUser() function call and its definition
-            // as it was causing auth/admin-restricted-operation error.
-            // We will now rely solely on explicit login/signup.
-
             const unsubscribe = onAuthStateChanged(authInstance, (currentUser) => {
                 setUser(currentUser);
                 console.log("FirebaseContext: Auth state changed. Current user:", currentUser ? currentUser.uid : "None (logged out or anonymous)");
-                setIsAuthReady(true); // Set true once auth state is first determined
+                setIsAuthReady(true);
             });
 
             return () => unsubscribe();
@@ -109,9 +110,10 @@ export const FirebaseProvider = ({ children }) => {
             console.error("FirebaseContext: Failed to initialize Firebase:", error);
             setIsAuthReady(true);
         }
-    }, []); // Empty dependency array ensures this runs once on mount
+    }, []);
 
-    const value = { app, auth, db, user, isAuthReady, appId: APP_ID_FOR_FIRESTORE_PATHS, login, signup, logout };
+    // <--- NEW: Add updateUserProfile to the context value
+    const value = { app, auth, db, user, isAuthReady, appId: APP_ID_FOR_FIRESTORE_PATHS, login, signup, logout, updateUserProfile };
 
     if (!isAuthReady) {
         return (

@@ -1,0 +1,3653 @@
+/* src/components/Navbar.css */
+
+
+/* src/App.css */
+
+html, body, #root {
+    height: 100%; /* Make them take 100% of their parent's height */
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scroll for content that might exceed viewport */
+}
+
+body {
+    background-color: var(--neumorphism-bg);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: var(--text-color-dark); /* Default text color */
+}
+
+/* Define your global variables here - this is crucial */
+:root {
+    --neumorphism-bg: #e0e5ec;
+    /* ... other neumorphism and color variables ... */
+    --navbar-height: 60px; /* Make sure this is defined */
+    --footer-height: 150px; /* Make sure this is defined (adjust as per your footer) */
+    /* ... rest of your global variables ... */
+}
+
+.App {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure App component fills the viewport */
+}
+
+/* This is where content below navbar and above footer goes */
+.App main {
+    flex-grow: 1; /* Allows main content to take up available space */
+    padding-top: var(--navbar-height); /* Push content below navbar */
+    padding-bottom: var(--footer-height); /* Push content above footer */
+    box-sizing: border-box; /* Ensure padding is included in the size */
+}
+
+/* ... rest of your App.css ... */
+
+
+:root {
+    /* Primary Blue Palette from your outline */
+    --ps-darkest-blue: #021024;
+    --ps-dark-blue: #052659;
+    --ps-medium-blue: #5483B3;
+    --ps-light-blue: #7DA0CA;
+    --ps-lightest-blue: #C1E8FF;
+
+    /* Extended UI/Neumorphism Colors */
+    --primary-blue: #007bff; /* Standard bright blue for navbars, buttons */
+    --dark-blue: #0056b3; /* Darker shade of blue for footer, accents */
+    --neumo-accent: #3498db; /* Vibrant blue for Neumorphism accents */
+    --neumo-accent-dark: #2980b9; /* Darker version of neumo-accent for hover states */
+    --white-color: #ffffff; /* Pure white, for text on dark backgrounds, card backgrounds */
+    --text-color: #333; /* Dark grey, for general text on light backgrounds */
+    --light-gray: #f8f9fa; /* Very light grey, for backgrounds */
+    --neumo-bg: #e0e5ec; /* Light, slightly bluish-grey for Neumorphism backgrounds - GOOD FOR LIGHT THEME BG */
+    --neumo-text: #334d6e; /* Dark blue-grey for Neumorphism text */
+    --neumo-light-shadow: #ffffff; /* White, for light part of Neumorphism shadows */
+    --neumo-dark-shadow: #a3b1c6; /* Cool grey, for dark part of Neumorphism shadows */
+    --nav-link-hover-blue: #cceeff; /* Very light blue, for nav-links hover (will adjust) */
+    --logout-red: #dc3545; /* Red for logout buttons */
+    --logout-red-hover: #c82333; /* Darker red for logout button hover */
+    --subtitle-grey: #666; /* Medium grey for subtitles */
+    --search-placeholder-grey: #888; /* Lighter grey for search input placeholder */
+    --hero-overlay-black: rgba(0, 0, 0, 0.4); /* Semi-transparent black for hero section overlay */
+    --search-input-bg: rgba(255, 255, 255, 0.9); /* Semi-transparent white for search input */
+    --dropdown-border-grey: #eee; /* Very light grey for dropdown border */
+    --profile-icon-bg: #f0f0f0; /* Very light grey for profile icon background */
+    --profile-icon-hover: #e0e0e0; /* Slightly darker grey for profile icon hover */
+    --star-gold: #FFD700; /* Gold for star ratings */
+    --client-title-grey: #777; /* Medium grey for client titles in testimonials */
+}
+
+/* src/components/Navbar.css - Corrected Variable Usage */
+
+.navbar-container {
+    background-color: var(--neumorphism-bg); /* Changed from --neumo-bg */
+    padding: 10px 0; /* Consistent with global --navbar-height */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: fixed; /* Use fixed for proper positioning with height variable */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    height: var(--navbar-height); /* Use the global height variable */
+    display: flex;
+    align-items: center;
+    box-sizing: border-box; /* Include padding/border in height */
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    width: 100%;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-color-dark); /* Changed from --ps-dark-blue */
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.navbar-brand .logo {
+    height: 40px;
+    margin-right: 10px;
+    border-radius: 8px; /* For neumorphism aesthetic */
+}
+
+.nav-elements {
+    display: flex;
+    align-items: center;
+    gap: 30px; /* Space between nav links and auth section */
+}
+
+.navbar-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.navbar-links li {
+    margin: 0 1.2rem;
+}
+
+.navbar-links li button { /* Changed 'a' to 'button' as per JSX */
+    background: none;
+    border: none;
+    text-decoration: none;
+    color: var(--text-color-medium); /* Changed from --ps-dark-blue */
+    font-weight: 500;
+    transition: color 0.3s ease;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 5px 0;
+}
+
+.navbar-links li button:hover, /* Changed 'a' to 'button' */
+.navbar-links li button:focus {
+    color: var(--primary-color); /* Changed from --ps-medium-blue */
+}
+
+/* Auth button styling */
+.btn { /* General btn styles, ensure these are consistent with App.css */
+    padding: 0.7rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-login {
+    background-color: var(--primary-color); /* Changed from --primary-blue */
+    color: var(--primary-color-text); /* Changed from --white-color */
+    margin-left: 2rem;
+    /* Add neumorphism shadow for consistency */
+    box-shadow: 3px 3px 6px var(--neumorphism-light-shadow), -3px -3px 6px var(--neumorphism-dark-shadow);
+}
+
+.btn-login:hover {
+    background-color: var(--primary-color-dark); /* Changed from --dark-blue */
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 8px var(--neumorphism-light-shadow), -4px -4px 8px var(--neumorphism-dark-shadow);
+}
+
+/* User Profile Menu */
+.profile-menu {
+    position: relative;
+    margin-left: 2rem;
+}
+
+.profile-avatar-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 40px;
+    height: 40px;
+    transition: box-shadow 0.3s ease;
+    /* Add neumorphism shadow for consistency */
+    box-shadow: 3px 3px 6px var(--neumorphism-light-shadow), -3px -3px 6px var(--neumorphism-dark-shadow);
+}
+
+.profile-avatar-btn:hover {
+    box-shadow: 0 0 0 4px var(--primary-color); /* Changed from --ps-medium-blue */
+    transform: translateY(-1px);
+}
+
+.profile-avatar-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: calc(100% + 15px); /* Adjusted spacing */
+    right: 0;
+    background-color: var(--neumorphism-bg); /* Changed from --white-color */
+    border-radius: 10px; /* Slightly more rounded */
+    box-shadow: 5px 5px 10px var(--neumorphism-light-shadow), -5px -5px 10px var(--neumorphism-dark-shadow); /* Neumorphism shadow */
+    list-style: none;
+    padding: 10px 0;
+    margin: 0;
+    min-width: 180px;
+    z-index: 1010;
+}
+
+.profile-dropdown li {
+    padding: 0;
+}
+
+.profile-dropdown li button { /* Changed 'a' to 'button' */
+    display: block;
+    width: 100%;
+    padding: 10px 20px;
+    text-align: left;
+    background: none;
+    border: none;
+    color: var(--text-color-dark); /* Changed from --text-color */
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.profile-dropdown li button:hover { /* Changed 'a' to 'button' */
+    background-color: var(--light-gray); /* Changed from --light-gray */
+}
+
+.profile-dropdown .logout-btn {
+    color: var(--logout-red); /* Using --logout-red */
+    font-weight: bold;
+    border-top: 1px solid var(--border-color);
+    margin-top: 5px;
+    padding-top: 10px;
+}
+.profile-dropdown .logout-btn button { /* Target the button inside the logout-btn li */
+    color: inherit; /* Inherit color from parent li */
+    font-weight: inherit; /* Inherit weight from parent li */
+}
+
+.profile-dropdown .logout-btn:hover {
+    background-color: rgba(220, 53, 69, 0.1); /* Slightly red background on hover */
+    color: var(--logout-red-hover); /* Using --logout-red-hover */
+}
+
+.profile-dropdown .svg-inline--fa {
+    margin-right: 10px;
+    color: var(--subtitle-grey); /* Using --subtitle-grey */
+}
+
+.profile-dropdown .logout-btn .svg-inline--fa {
+    color: var(--logout-red);
+}
+
+/* Mobile Menu Toggle */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-color-dark); /* Changed from --ps-dark-blue */
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+/* --- Responsive Design for Navbar --- */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0 1rem;
+    }
+
+    .nav-elements {
+        position: absolute;
+        top: var(--navbar-height);
+        left: 0;
+        width: 100%;
+        background-color: var(--neumorphism-bg); /* Changed from --neumo-bg */
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem 0;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transform: translateY(-100%);
+        transition: transform 0.3s ease-in-out;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .nav-elements.active {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .navbar-links {
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+    }
+
+    .navbar-links li {
+        margin: 0;
+        width: 100%;
+        padding: 0.8rem 0;
+    }
+
+    .navbar-links li button { /* Changed 'a' to 'button' */
+        padding: 0.8rem 1rem;
+        display: block;
+        width: 100%;
+        text-align: left;
+    }
+
+    .navbar-auth {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 1rem 0;
+    }
+
+    .btn-login {
+        margin: 0;
+        width: 80%;
+    }
+
+    .profile-menu {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+    }
+
+    .profile-avatar-btn {
+        margin-bottom: 10px;
+    }
+
+    .profile-dropdown {
+        position: static;
+        width: 90%;
+        max-width: 250px;
+        margin: 0 auto;
+        box-shadow: none;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+}
+/* src/components/Footer.css */
+
+/* src/components/Footer.css */
+
+.footer-container {
+    background-color: var(--ps-darkest-blue);
+    color: var(--ps-lightest-blue);
+    padding: 3rem 2rem;
+    font-size: 0.95rem;
+    text-align: center;
+    border-top: 5px solid var(--ps-medium-blue);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box; /* Ensures padding is included in height calculation */
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid; /* Use CSS Grid for flexible multi-column layout */
+    /* Define grid areas for better control on larger screens */
+    grid-template-areas:
+        "brand-info links contact newsletter social";
+    grid-template-columns: 1.2fr 0.8fr 1fr 1.2fr 0.5fr; /* Adjust column widths as needed */
+    gap: 2.5rem; /* Space between grid items */
+    align-items: start; /* Align content to the top of grid cells */
+    padding-bottom: 2rem; /* Space before the bottom section */
+    width: 100%;
+}
+
+/* Common styling for all footer sections */
+.footer-section {
+    text-align: left;
+}
+
+.footer-section h3 {
+    color: var(--ps-medium-blue);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Footer Brand Info (Existing, but with grid area) */
+.footer-brand-info {
+    grid-area: brand-info; /* Assign to grid area */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align text to left */
+}
+
+.footer-logo {
+    height: 60px;
+    margin-bottom: 1rem;
+}
+
+.footer-tagline {
+    font-style: italic;
+    color: var(--ps-light-blue);
+    margin: 0;
+    max-width: 300px;
+}
+
+/* Quick Links Section */
+.footer-links {
+    grid-area: links; /* Assign to grid area */
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.7rem;
+}
+
+.footer-links a {
+    color: var(--ps-lightest-blue);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--ps-medium-blue);
+    text-decoration: underline;
+}
+
+/* Contact Info Section */
+.footer-contact {
+    grid-area: contact; /* Assign to grid area */
+}
+
+.footer-contact p {
+    color: var(--ps-light-blue);
+    margin-bottom: 0.7rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.footer-contact .svg-inline--fa {
+    color: var(--ps-medium-blue);
+    font-size: 1rem;
+    margin-top: 2px;
+}
+
+/* Newsletter Section */
+.footer-newsletter {
+    grid-area: newsletter; /* Assign to grid area */
+}
+
+.footer-newsletter p {
+    color: var(--ps-light-blue);
+    margin-bottom: 1rem;
+}
+
+.newsletter-form {
+    display: flex;
+    flex-direction: column; /* Stack input and button on smaller screens */
+    gap: 10px;
+}
+
+.newsletter-form input {
+    padding: 0.8rem;
+    border: 1px solid var(--ps-light-blue);
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--ps-lightest-blue);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.newsletter-form input::placeholder {
+    color: var(--ps-light-blue);
+    opacity: 0.7;
+}
+
+.newsletter-form input:focus {
+    border-color: var(--ps-medium-blue);
+}
+
+.newsletter-form button {
+    padding: 0.8rem 1.5rem;
+    background-color: var(--ps-medium-blue);
+    color: var(--ps-darkest-blue);
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.newsletter-form button:hover {
+    background-color: #4cdcb6; /* Slightly darker shade on hover */
+    transform: translateY(-1px);
+}
+
+/* Social Links Section (Existing, but with grid area and wrapper) */
+.footer-social-links {
+    grid-area: social; /* Assign to grid area */
+    display: flex;
+    flex-direction: column; /* Stack heading and icons */
+    align-items: flex-end; /* Align to the right on larger screens */
+    text-align: right;
+}
+
+.social-icons-wrapper {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1rem; /* Space below heading */
+}
+
+.footer-social-links a {
+    color: var(--ps-lightest-blue);
+    font-size: 1.8rem;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.footer-social-links a:hover {
+    color: var(--ps-medium-blue);
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    text-align: center;
+}
+
+.footer-copyright {
+    margin: 0;
+    color: var(--subtitle-grey);
+}
+
+/* --- Responsive Design for Footer --- */
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr; /* Stack all sections on mobile */
+        grid-template-areas:
+            "brand-info"
+            "social" /* Move social links up on mobile */
+            "links"
+            "contact"
+            "newsletter";
+        gap: 2rem;
+    }
+
+    .footer-section,
+    .footer-brand-info,
+    .footer-social-links {
+        text-align: center;
+        align-items: center;
+    }
+
+    .footer-contact p {
+        justify-content: center;
+    }
+
+    .newsletter-form {
+        flex-direction: column;
+    }
+
+    .social-icons-wrapper {
+        justify-content: center; /* Center icons on mobile */
+    }
+}
+
+/* src/components/HeroSection.css */
+
+/* Hero Section Container */
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 80vh; /* Takes 80% of the viewport height */
+    background: url('../public/images/parking.jpeg') no-repeat center center/cover;
+    /* You can replace the placeholder URL with your actual background image later.
+       Make sure your image path is correct, e.g., url('/images/your-hero-bg.jpg') if in public/images */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--white-color); /* White text over dark background */
+    text-align: center;
+    overflow: hidden; /* Ensures content doesn't spill out */
+}
+
+/* Optional overlay for better text readability */
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--hero-overlay-black); /* Semi-transparent black from your variables */
+    z-index: 1; /* Ensures it's above the background image but below content */
+}
+
+/* Content within the Hero Section */
+.hero-content {
+    position: relative; /* Brings content above the overlay */
+    z-index: 2;
+    max-width: 800px; /* Limit content width */
+    padding: 0 20px;
+}
+
+.hero-title {
+    font-size: 3.8rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow for readability */
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2.5rem;
+    line-height: 1.5;
+    color: var(--ps-lightest-blue); /* Lighter blue for subtitle */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Search Bar Styling */
+.hero-search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--search-input-bg); /* Semi-transparent white */
+    border-radius: 30px; /* Rounded corners for the search bar container */
+    padding: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 600px; /* Max width for the search bar */
+    margin: 0 auto; /* Center the search bar */
+}
+
+.search-input {
+    flex-grow: 1; /* Takes up available space */
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    outline: none; /* Remove outline on focus */
+    background-color: transparent; /* Make input background transparent */
+    color: var(--text-color); /* Dark text for input */
+}
+
+.search-input::placeholder {
+    color: var(--search-placeholder-grey); /* Lighter grey for placeholder */
+}
+
+.search-button {
+    background-color: var(--primary-blue); /* Vibrant blue button */
+    color: var(--white-color);
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-left: 10px; /* Space from input */
+}
+
+.search-button:hover {
+    background-color: var(--dark-blue);
+    transform: translateY(-2px);
+}
+
+/* --- Responsive Design for Hero Section --- */
+@media (max-width: 768px) {
+    .hero-section {
+        height: 70vh; /* Adjust height for smaller screens */
+    }
+
+    .hero-title {
+        font-size: 2.5rem; /* Smaller title on mobile */
+        margin-bottom: 0.8rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem; /* Smaller subtitle on mobile */
+        margin-bottom: 2rem;
+    }
+
+    .hero-search-bar {
+        flex-direction: column; /* Stack input and button vertically */
+        padding: 15px;
+        max-width: 90%; /* Adjust width */
+    }
+
+    .search-input {
+        width: 100%;
+        margin-bottom: 10px; /* Space between input and button */
+        padding: 1rem;
+        text-align: center; /* Center placeholder/text on mobile */
+    }
+
+    .search-button {
+        width: 100%;
+        margin-left: 0; /* Remove horizontal margin */
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+}
+
+/* src/components/AboutUs.css */
+/* src/components/AboutUs.css */
+
+.about-us-section {
+    padding: 6rem 2rem; /* Ample padding for the section */
+    background-color: var(--white-color); /* White background for this section */
+    max-width: 1200px; /* Align with your main content width */
+    margin: 0 auto; /* Center the section on the page */
+    text-align: center; /* Only for the main title */
+}
+
+/* New: Main title for the section, centered */
+.about-us-main-title {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: var(--ps-dark-blue); /* Dark blue from your palette */
+    margin-bottom: 2rem; /* Increased margin for decoration */
+    position: relative; /* Needed for pseudo-element decoration */
+    display: inline-block; /* Ensures the pseudo-element width is based on text */
+    padding-bottom: 0.5rem; /* Space for the underline */
+    letter-spacing: 0.03em; /* Subtle letter spacing */
+}
+
+/* Decoration for the main title: a subtle blue underline */
+.about-us-main-title::after {
+    content: '';
+    position: absolute;
+    left: 50%; /* Center the underline relative to the title */
+    transform: translateX(-50%); /* Adjust for centering */
+    bottom: 0;
+    width: 60%; /* Adjust width of the underline */
+    height: 4px; /* Thickness of the underline */
+    background-color: var(--ps-medium-blue); /* Your medium blue color */
+    border-radius: 2px; /* Slightly rounded ends */
+}
+
+
+/* Container for the two columns (image and text) */
+.about-us-columns-container {
+    display: flex; /* Enable flexbox for two-column layout */
+    justify-content: center; /* Center the columns horizontally */
+    align-items: flex-start; /* Align items to the top (image and text start at same level) */
+    gap: 3rem; /* Space between content and image */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    margin-top: 2rem; /* Space below the main title */
+    width: 100%; /* Ensure it takes full width of its parent (.about-us-section) */
+}
+
+/* Image styling - Left Column */ 
+.about-us-image-wrapper {
+    flex-shrink: 0; /* Prevent image from shrinking too much */
+    max-width: 500px; /* Max width for the image column */
+    width: 100%; /* Ensure it takes full width on small screens */
+    display: flex; /* Use flex to center image if it's smaller than wrapper */
+    justify-content: center; /* Center image horizontally */
+    align-items: center; /* Center image vertically */
+    border-radius: 12px; /* Apply border-radius to wrapper for consistent shape */
+    overflow: hidden; /* Ensure image respects border-radius */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Shadow for the image container */
+}
+
+.about-us-image {
+    max-width: 100%; /* Ensure image fits within its wrapper */
+    height: auto;
+    display: block; /* Removes extra space below image */
+    /* border-radius and box-shadow moved to wrapper for better control */
+}
+
+/* Text content - Right Column */
+.about-us-content {
+    flex: 1; /* Allows content to grow and take available space */
+    min-width: 300px; /* Minimum width for the text column before wrapping */
+    max-width: 600px; /* Max width for the text content to prevent it from being too wide */
+    text-align: left; /* THIS IS THE KEY CHANGE: Left-aligns all text within this column */
+}
+
+.about-us-description {
+    font-size: 1.1rem;
+    color: var(--text-color); /* General text color */
+    line-height: 1.8; /* Slightly increased line height for better readability */
+    margin-bottom: 1.5rem; /* Space between paragraphs */
+    letter-spacing: 0.01em; /* Very subtle letter spacing for paragraphs */
+}
+
+.about-us-description:last-child {
+    margin-bottom: 1.5rem; /* Keep margin for button below it */
+}
+
+/* Read More Button styling */
+.btn-primary {
+    background-color: var(--primary-blue); /* Use your primary button blue */
+    color: var(--white-color);
+    padding: 0.8rem 2rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    display: inline-block; /* For proper button-like behavior */
+    text-decoration: none; /* Remove underline from link */
+}
+
+.btn-primary:hover {
+    background-color: var(--dark-blue);
+    transform: translateY(-2px);
+}
+
+
+/* --- Responsive Design for About Us Section --- */
+@media (max-width: 992px) {
+    .about-us-main-title {
+        font-size: 2.3rem;
+    }
+    .about-us-description {
+        font-size: 1rem;
+    }
+    .about-us-content,
+    .about-us-image-wrapper {
+        max-width: 100%; /* Allow both to take full width when stacked */
+    }
+}
+
+@media (max-width: 768px) {
+    .about-us-section {
+        padding: 4rem 1.5rem;
+    }
+    .about-us-columns-container {
+        flex-direction: column; /* Stack content and image vertically */
+        align-items: center; /* Center items when stacked */
+    }
+    .about-us-content {
+        text-align: center; /* Center text on mobile for better readability */
+    }
+    /* Main title underline centering is handled by the main rule, no override needed */
+}
+
+@media (max-width: 480px) {
+    .about-us-main-title {
+        font-size: 2rem;
+    }
+}
+
+/* src/pages/AboutUsDetails.css */
+
+.about-us-details-section {
+    padding: 6rem 2rem;
+    background-color: var(--light-gray); /* Light background for the page */
+    min-height: calc(100vh - var(--navbar-height, 80px) - var(--footer-height, 150px)); /* Ensure it takes up most of the viewport, minus nav/footer */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align content to the top */
+}
+
+.about-us-details-content {
+    max-width: 900px; /* Max width for readability */
+    width: 100%;
+    background-color: var(--white-color);
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: left; /* Keep text left-aligned for long reads */
+}
+
+.about-us-details-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--ps-dark-blue);
+    margin-bottom: 2rem;
+    text-align: center; /* Center the title on this page */
+    position: relative;
+    display: inline-block; /* For underline positioning */
+    padding-bottom: 0.5rem;
+}
+
+.about-us-details-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 40%; /* Shorter underline for sub-page title */
+    height: 4px;
+    background-color: var(--ps-medium-blue);
+    border-radius: 2px;
+}
+
+.about-us-details-paragraph {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.about-us-details-paragraph:last-of-type {
+    margin-bottom: 2.5rem; /* Space before button */
+}
+
+.about-us-details-content .btn-primary {
+    margin-top: 1rem; /* Space above button */
+    display: block; /* Make button take full width on smaller screens */
+    width: fit-content; /* Adjust to content width on larger screens */
+    margin-left: auto; /* Center button */
+    margin-right: auto; /* Center button */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .about-us-details-section {
+        padding: 3rem 1rem;
+    }
+    .about-us-details-content {
+        padding: 2rem;
+    }
+    .about-us-details-title {
+        font-size: 2rem;
+    }
+    .about-us-details-paragraph {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-us-details-content {
+        padding: 1.5rem;
+    }
+    .about-us-details-title {
+        font-size: 1.8rem;
+    }
+}
+
+/* src/components/FeaturesSection.css */
+
+.features-section {
+    padding: 6rem 2rem;
+    background-color: var(--light-gray); /* Light grey background for the whole section */
+    text-align: center;
+}
+
+.features-header {
+    margin-bottom: 4rem;
+}
+
+.features-main-title {
+    font-size: 3rem; /* Slightly larger for main combined title */
+    font-weight: bold;
+    color: var(--ps-dark-blue);
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+}
+
+.features-main-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 40%; /* Shorter underline for main title */
+    height: 4px;
+    background-color: var(--ps-medium-blue);
+    border-radius: 2px;
+}
+
+.features-main-subtitle {
+    font-size: 1.4rem;
+    color: var(--subtitle-grey);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Sub-section titles and subtitles */
+.subsection-title {
+    font-size: 2.2rem; /* Size for "How It Works" and "Why Choose Us" titles */
+    font-weight: bold;
+    color: var(--ps-dark-blue);
+    margin-top: 4rem; /* Space above sub-section titles */
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.4rem;
+}
+
+.subsection-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 50%; /* Underline for sub-section titles */
+    height: 3px;
+    background-color: var(--ps-light-blue);
+    border-radius: 1.5px;
+}
+
+.subsection-subtitle {
+    font-size: 1.1rem;
+    color: var(--subtitle-grey);
+    max-width: 700px;
+    margin: 0 auto 3rem auto; /* Space below subtitle */
+}
+
+/* How It Works Cards Styling */
+.how-it-works-subsection {
+    margin-bottom: 5rem; /* Space between How It Works and Why Choose Us sections */
+}
+
+.steps-container {
+    display: flex;
+    justify-content: center; /* Center the cards in the available space */
+    gap: 1.5rem; /* Space between step cards */
+    white-space: normal; /* Allow text inside cards to wrap normally */
+    padding-bottom: 1rem; /* Add some padding at the bottom for potential scrollbar */
+    overflow-x: auto; /* Enable horizontal scrolling if cards overflow */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS devices */
+    scroll-snap-type: x mandatory; /* Optional: Snap to cards on scroll */
+}
+
+.step-card {
+    background-color: var(--white-color); /* White background for cards */
+    padding: 2rem 1.2rem; /* Reduced padding */
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Soft shadow for cards */
+    min-width: 280px; /* Minimum width for each card */
+    max-width: 300px; /* Maximum width for each card */
+    flex-shrink: 0; /* Prevent cards from shrinking smaller than min-width */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition for hover effect */
+    text-align: center;
+    scroll-snap-align: center; /* Optional: Snap to center when scrolling */
+}
+
+.step-card:hover {
+    transform: translateY(-8px) scale(1.02); /* Lift and slightly scale up on hover */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* Adjusted shadow on hover */
+}
+
+.step-icon-wrapper {
+    background-color: var(--ps-lightest-blue); /* Lightest blue background for icon */
+    border-radius: 50%; /* Circular icon wrapper */
+    width: 90px; /* Reduced size */
+    height: 90px; /* Reduced size */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.8rem; /* Adjusted margin */
+    box-shadow: inset 2px 2px 5px var(--neumo-dark-shadow),
+                inset -5px -5px 10px var(--neumo-light-shadow); /* Inner neumorphism shadow */
+}
+
+.step-icon {
+    font-size: 3rem; /* Reduced icon size */
+    color: var(--ps-dark-blue); /* Dark blue icon color */
+}
+
+.step-title {
+    font-size: 1.6rem; /* Reduced title font size */
+    font-weight: bold;
+    color: var(--ps-dark-blue); /* Dark blue for title */
+    margin-bottom: 0.8rem; /* Adjusted margin */
+}
+
+.step-description {
+    font-size: 0.95rem; /* Slightly reduced description font size */
+    color: var(--text-color); /* Dark grey for description text */
+    line-height: 1.6;
+}
+
+/* Why Choose Us Cards Styling */
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
+    gap: 2.5rem; /* Space between cards */
+    max-width: 1200px; /* Max width for the grid */
+    margin: 0 auto; /* Center the grid */
+}
+
+.benefit-card {
+    background-color: var(--white-color); /* White background for cards */
+    padding: 2.5rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Soft shadow */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition for hover effect */
+}
+
+.benefit-card.card-hover-scale:hover {
+    transform: translateY(-10px) scale(1.02); /* Lift and slightly scale up */
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15); /* More pronounced shadow on hover */
+}
+
+.benefit-icon-wrapper {
+    background-color: var(--ps-lightest-blue);
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.8rem;
+    box-shadow: inset 2px 2px 5px var(--neumo-dark-shadow),
+                inset -5px -5px 10px var(--neumo-light-shadow);
+}
+
+.benefit-icon {
+    font-size: 3rem;
+    color: var(--ps-dark-blue);
+}
+
+.benefit-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: var(--ps-dark-blue);
+    margin-bottom: 0.8rem;
+}
+
+.benefit-description {
+    font-size: 0.95rem;
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* --- Responsive Design for Features Section --- */
+@media (max-width: 992px) {
+    .features-main-title {
+        font-size: 2.5rem;
+    }
+    .features-main-subtitle {
+        font-size: 1.2rem;
+    }
+    .subsection-title {
+        font-size: 2rem;
+    }
+    .subsection-subtitle {
+        font-size: 1rem;
+    }
+    .steps-container {
+        gap: 1rem; /* Reduce gap on medium screens */
+    }
+    .step-card {
+        min-width: 250px; /* Adjust min-width for smaller screens */
+        max-width: 280px; /* Adjust max-width for smaller screens */
+        padding: 1.8rem 1rem; /* Slightly less padding */
+    }
+    .step-icon-wrapper {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 1.5rem;
+    }
+    .step-icon {
+        font-size: 2.8rem;
+    }
+    .step-title {
+        font-size: 1.4rem;
+    }
+    .step-description {
+        font-size: 0.9rem;
+    }
+    .benefits-grid {
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+    .benefit-card {
+        padding: 2rem 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .features-section {
+        padding: 4rem 1.5rem;
+    }
+    .features-main-title {
+        font-size: 2.2rem;
+    }
+    .subsection-title {
+        font-size: 1.8rem;
+    }
+    .steps-container {
+        /* Cards will still stay in one row, enabling horizontal scroll if needed */
+        justify-content: flex-start; /* Align to start for better scroll experience */
+    }
+    .benefits-grid {
+        grid-template-columns: 1fr; /* Stack cards on very small screens */
+        max-width: 400px; /* Limit width when stacked */
+    }
+}
+
+@media (max-width: 480px) {
+    .features-main-title {
+        font-size: 1.8rem;
+    }
+    .subsection-title {
+        font-size: 1.6rem;
+    }
+    .step-card, .benefit-card {
+        min-width: 220px; /* Further reduce min-width for very small screens */
+        max-width: 100%; /* Allow full width when stacked */
+    }
+}
+
+/* src/components/PricingSection.css */
+
+.pricing-section {
+    padding: 6rem 2rem;
+    background-color: var(--white-color); /* White background for this section */
+    text-align: center;
+}
+
+.pricing-header {
+    margin-bottom: 4rem;
+}
+
+.pricing-title {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: var(--ps-dark-blue);
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+}
+
+.pricing-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 60%;
+    height: 4px;
+    background-color: var(--ps-medium-blue);
+    border-radius: 2px;
+}
+
+.pricing-subtitle {
+    font-size: 1.3rem;
+    color: var(--subtitle-grey);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid for cards */
+    gap: 2.5rem; /* Space between cards */
+    max-width: 1000px; /* Max width for the grid */
+    margin: 0 auto; /* Center the grid */
+}
+
+.pricing-card {
+    background-color: var(--light-gray); /* Light background for cards */
+    padding: 2.5rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Soft shadow */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease; /* Transition for hover effect */
+    position: relative; /* For the popular badge */
+    border: 2px solid transparent; /* Default transparent border */
+}
+
+/* Card Hover Scale Effect */
+.pricing-card.card-hover-scale:hover {
+    transform: translateY(-10px) scale(1.02); /* Lift and slightly scale up */
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15); /* More pronounced shadow on hover */
+    border-color: var(--ps-medium-blue); /* Highlight border on hover */
+}
+
+.popular-plan {
+    border-color: var(--primary-blue); /* Highlight for popular plan */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15), 0 0 0 5px rgba(0, 123, 255, 0.2); /* Extra shadow/ring */
+}
+
+.popular-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: var(--primary-blue);
+    color: var(--white-color);
+    padding: 0.3rem 0.8rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.plan-name {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--ps-dark-blue);
+    margin-bottom: 1.5rem;
+}
+
+.plan-price-wrapper {
+    margin-bottom: 1.5rem;
+}
+
+.plan-price {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: var(--primary-blue);
+    line-height: 1;
+}
+
+.plan-period {
+    font-size: 1.2rem;
+    color: var(--subtitle-grey);
+    margin-left: 5px;
+}
+
+.plan-features {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2rem;
+    text-align: left; /* Align features to left within the card */
+    width: 100%; /* Ensure list takes full width for alignment */
+}
+
+.plan-features li {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.plan-features li:last-child {
+    margin-bottom: 0;
+}
+
+.feature-icon {
+    color: var(--ps-medium-blue); /* Checkmark icon color */
+    font-size: 1.1rem;
+}
+
+/* Button styling (using existing .btn .btn-primary) */
+.pricing-card .btn-primary {
+    margin-top: auto; /* Push button to the bottom if cards have varying content height */
+    padding: 0.7rem 1.8rem;
+    font-size: 1rem;
+    /* Ensure ripple effect works with this button */
+    position: relative;
+    overflow: hidden;
+    transform: translate3d(0, 0, 0);
+}
+
+/* --- Responsive Design for Pricing Section --- */
+@media (max-width: 992px) {
+    .pricing-title {
+        font-size: 2.3rem;
+    }
+    .pricing-subtitle {
+        font-size: 1.1rem;
+    }
+    .pricing-grid {
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adjust minmax for smaller screens */
+    }
+    .pricing-card {
+        padding: 2rem 1rem;
+    }
+    .plan-name {
+        font-size: 1.8rem;
+    }
+    .plan-price {
+        font-size: 3rem;
+    }
+    .plan-period {
+        font-size: 1rem;
+    }
+    .plan-features li {
+        font-size: 0.95rem;
+    }
+    .feature-icon {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .pricing-section {
+        padding: 4rem 1.5rem;
+    }
+    .pricing-grid {
+        grid-template-columns: 1fr; /* Stack cards vertically on small screens */
+        max-width: 400px; /* Limit width when stacked */
+    }
+}
+
+@media (max-width: 480px) {
+    .pricing-title {
+        font-size: 2rem;
+    }
+    .pricing-subtitle {
+        font-size: 1rem;
+    }
+    .plan-name {
+        font-size: 1.6rem;
+    }
+    .plan-price {
+        font-size: 2.5rem;
+    }
+}
+
+/* src/components/TestimonialsSection.css */
+
+.testimonials-section {
+    padding: 6rem 2rem;
+    background-color: var(--light-gray); /* Light grey background */
+    text-align: center;
+    opacity: 0; /* Hidden by default for fade-in effect */
+    transform: translateY(20px); /* Slightly moved down for fade-in effect */
+    transition: opacity 1s ease-out, transform 1s ease-out; /* Animation properties */
+}
+
+/* Class applied when section is visible */
+.testimonials-section.fade-in-on-scroll {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.testimonials-header {
+    margin-bottom: 4rem;
+}
+
+.testimonials-title {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: var(--ps-dark-blue);
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+}
+
+.testimonials-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 60%;
+    height: 4px;
+    background-color: var(--ps-medium-blue);
+    border-radius: 2px;
+}
+
+.testimonials-subtitle {
+    font-size: 1.3rem;
+    color: var(--subtitle-grey);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.testimonials-grid {
+    /* KEY CHANGE: Set to 3 columns explicitly for desktop */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Three equal columns */
+    gap: 2.5rem; /* Space between cards */
+    max-width: 1200px; /* Max width for the grid to fit 3 columns well */
+    margin: 0 auto; /* Center the grid */
+}
+
+.testimonial-card {
+    background-color: var(--white-color);
+    padding: 2.5rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+}
+
+/* NEW: Styling for the avatar */
+.testimonial-avatar-wrapper {
+    width: 90px; /* Size of the avatar container */
+    height: 90px;
+    border-radius: 50%; /* Make it circular */
+    overflow: hidden; /* Clip image to circle */
+    margin-bottom: 1.5rem; /* Space below avatar */
+    border: 3px solid var(--ps-medium-blue); /* Border around avatar */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for avatar */
+}
+
+.testimonial-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure image covers the circle */
+}
+
+.quote-icon {
+    font-size: 2.5rem;
+    color: var(--ps-medium-blue);
+    margin-bottom: 1rem; /* Adjusted margin for avatar */
+}
+
+.testimonial-quote {
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--text-color);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    flex-grow: 1; /* Allow quote to take up available space */
+}
+
+.testimonial-author-info {
+    margin-top: auto; /* Pushes author info to the bottom */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.author-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--ps-dark-blue);
+}
+
+.author-title {
+    font-size: 0.9rem;
+    color: var(--client-title-grey);
+    margin-top: 5px;
+}
+
+.star-rating {
+    color: var(--star-gold); /* Gold color for stars */
+    font-size: 1.1rem;
+}
+
+.star-empty {
+    color: #ccc; /* Lighter color for un-filled stars */
+}
+
+/* --- Responsive Design for Testimonials Section --- */
+@media (max-width: 992px) {
+    .testimonials-title {
+        font-size: 2.3rem;
+    }
+    .testimonials-subtitle {
+        font-size: 1.1rem;
+    }
+    .testimonials-grid {
+        /* Adjust for 2 columns on tablets */
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 2rem;
+        max-width: 800px; /* Adjust max-width to fit 2 columns well */
+    }
+    .testimonial-card {
+        padding: 2rem 1.5rem;
+    }
+    .testimonial-quote {
+        font-size: 1rem;
+    }
+    .testimonial-avatar-wrapper {
+        width: 80px;
+        height: 80px;
+    }
+    .quote-icon {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .testimonials-section {
+        padding: 4rem 1.5rem;
+    }
+    .testimonials-grid {
+        grid-template-columns: 1fr; /* Stack cards vertically on small screens */
+        max-width: 400px; /* Limit width when stacked */
+    }
+    .testimonial-avatar-wrapper {
+        width: 70px;
+        height: 70px;
+    }
+    .quote-icon {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .testimonials-title {
+        font-size: 2rem;
+    }
+    .testimonials-subtitle {
+        font-size: 1rem;
+    }
+    .testimonial-card {
+        padding: 1.5rem 1rem;
+    }
+}
+
+/* src/pages/FAQPage.css */
+
+.faq-page-section {
+    padding: 6rem 2rem;
+    background-color: var(--light-gray);
+    min-height: calc(100vh - var(--navbar-height, 80px) - var(--footer-height, 150px));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.faq-header {
+    margin-bottom: 4rem;
+}
+
+.faq-page-title {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: var(--ps-dark-blue);
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+}
+
+.faq-page-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 60%;
+    height: 4px;
+    background-color: var(--ps-medium-blue);
+    border-radius: 2px;
+}
+
+.faq-page-subtitle {
+    font-size: 1.3rem;
+    color: var(--subtitle-grey);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-list-container {
+    max-width: 900px;
+    width: 100%;
+    margin-bottom: 3rem;
+}
+
+.faq-item {
+    background-color: var(--white-color);
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden; /* Ensures border-radius applies to expanding content */
+}
+
+.faq-question-button {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.3s ease;
+}
+
+.faq-question-button:hover {
+    background-color: var(--light-gray);
+}
+
+.faq-question {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--ps-dark-blue);
+    margin: 0;
+    flex-grow: 1;
+}
+
+.faq-toggle-icon {
+    font-size: 1.2rem;
+    color: var(--ps-medium-blue);
+    margin-left: 1rem;
+}
+
+.faq-answer-container {
+    padding: 0 2rem 1.5rem 2rem; /* Padding for the answer */
+    animation: fadeIn 0.3s ease-out; /* Simple fade-in animation for answer */
+}
+
+.faq-answer {
+    font-size: 1rem;
+    color: var(--text-color);
+    line-height: 1.7;
+    margin: 0;
+}
+
+.faq-contact-prompt {
+    margin-top: 3rem;
+    padding: 2rem;
+    background-color: var(--ps-lightest-blue);
+    border-radius: 12px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.faq-contact-prompt p {
+    font-size: 1.1rem;
+    color: var(--ps-dark-blue);
+    margin-bottom: 1.5rem;
+}
+
+/* Keyframes for answer fade-in */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .faq-page-section {
+        padding: 4rem 1rem;
+    }
+    .faq-page-title {
+        font-size: 2.2rem;
+    }
+    .faq-page-subtitle {
+        font-size: 1.1rem;
+    }
+    .faq-question-button {
+        padding: 1.2rem 1.5rem;
+    }
+    .faq-question {
+        font-size: 1.1rem;
+    }
+    .faq-answer-container {
+        padding: 0 1.5rem 1.2rem 1.5rem;
+    }
+    .faq-answer {
+        font-size: 0.95rem;
+    }
+    .faq-contact-prompt {
+        padding: 1.5rem;
+    }
+    .faq-contact-prompt p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .faq-page-title {
+        font-size: 1.8rem;
+    }
+    .faq-page-subtitle {
+        font-size: 1rem;
+    }
+    .faq-question {
+        font-size: 1rem;
+    }
+}
+
+/* src/pages/ChangeAvatarPage.css */
+
+.change-avatar-page-section {
+    padding: 6rem 2rem;
+    background-color: var(--light-gray);
+    min-height: calc(100vh - var(--navbar-height, 80px) - var(--footer-height, 150px));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.change-avatar-header {
+    margin-bottom: 3rem;
+}
+
+.change-avatar-title {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: var(--ps-dark-blue);
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+}
+
+.change-avatar-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 60%;
+    height: 4px;
+    background-color: var(--ps-medium-blue);
+    border-radius: 2px;
+}
+
+.change-avatar-subtitle {
+    font-size: 1.3rem;
+    color: var(--subtitle-grey);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Responsive grid for avatars */
+    gap: 1.5rem; /* Space between avatars */
+    max-width: 800px; /* Max width for the grid */
+    width: 100%;
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    background-color: var(--white-color);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.avatar-option {
+    width: 120px; /* Fixed size for each avatar container */
+    height: 120px;
+    border-radius: 50%; /* Circular avatars */
+    overflow: hidden;
+    cursor: pointer;
+    border: 3px solid transparent; /* Default border */
+    transition: border-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex; /* To center image if needed */
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.avatar-option:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.avatar-option.selected {
+    border-color: var(--primary-blue); /* Highlight selected avatar */
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.3), 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure image fills the circle */
+}
+
+.back-button-container {
+    margin-top: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .change-avatar-page-section {
+        padding: 4rem 1rem;
+    }
+    .change-avatar-title {
+        font-size: 2.2rem;
+    }
+    .change-avatar-subtitle {
+        font-size: 1.1rem;
+    }
+    .avatar-grid {
+        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); /* Smaller avatars on mobile */
+        gap: 1rem;
+        padding: 1rem;
+    }
+    .avatar-option {
+        width: 90px;
+        height: 90px;
+    }
+}
+
+@media (max-width: 480px) {
+    .change-avatar-title {
+        font-size: 1.8rem;
+    }
+    .change-avatar-subtitle {
+        font-size: 1rem;
+    }
+    .avatar-grid {
+        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); /* Even smaller on tiny screens */
+    }
+    .avatar-option {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+/* src/pages/ProfilePage.css */
+
+.profile-page-section {
+    padding: 4rem 1.5rem; 
+    background-color: var(--light-gray);
+    min-height: calc(100vh - var(--navbar-height, 80px) - var(--footer-height, 150px));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 800px; 
+    margin: 0 auto; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.05); 
+    border-radius: 15px; 
+}
+
+.profile-header {
+    margin-bottom: 2.5rem;
+    width: 100%; 
+}
+
+.profile-page-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--ps-dark-blue);
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+}
+
+.profile-page-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 40%;
+    height: 4px;
+    background-color: var(--ps-medium-blue);
+    border-radius: 2px;
+}
+
+.profile-avatar-area {
+    margin-bottom: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-large-avatar-wrapper {
+    width: 150px; 
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    border: 4px solid var(--ps-medium-blue); 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.profile-large-avatar-wrapper:hover {
+    transform: translateY(-5px);
+}
+
+.profile-large-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.change-avatar-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    color: var(--white-color);
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    opacity: 0; 
+    transition: opacity 0.2s ease;
+}
+
+.profile-large-avatar-wrapper:hover .change-avatar-overlay {
+    opacity: 1; 
+}
+
+.profile-user-name {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--ps-dark-blue);
+    margin-bottom: 0.5rem;
+}
+
+.profile-user-status {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    max-width: 80%; 
+}
+
+/* NEW: Info Cards for Username, About, Phone, Links */
+.profile-info-card {
+    background-color: var(--white-color);
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    width: 100%; /* Take full width of parent (.profile-page-section) */
+    margin-bottom: 1.5rem;
+    overflow: hidden; /* Ensures content respects border-radius */
+}
+
+.profile-info-card:last-of-type {
+    margin-bottom: 3rem; /* Space before options list */
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--light-gray); /* Separator */
+    gap: 1rem;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-icon {
+    font-size: 1.5rem;
+    color: var(--ps-medium-blue);
+    width: 30px; /* Fixed width for consistent alignment */
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.info-text-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    flex-grow: 1; /* Allows text to take available space */
+}
+
+.info-label {
+    font-size: 0.85rem;
+    color: var(--subtitle-grey);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 3px;
+}
+
+.info-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ps-dark-blue);
+    word-break: break-word; /* Break long words */
+}
+
+.info-input { /* Style for editable input fields */
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--light-gray);
+    border-radius: 8px;
+    font-size: 1.1rem;
+    color: var(--ps-dark-blue);
+    background-color: var(--neumo-bg);
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.info-input:focus {
+    border-color: var(--ps-medium-blue);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+.info-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ps-medium-blue);
+    font-size: 1.2rem;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.icon-button:hover {
+    background-color: var(--neumo-bg);
+}
+
+.icon-button.save-icon { color: var(--success-green); }
+.icon-button.cancel-icon { color: var(--error-red); }
+
+/* Specific style for link items */
+.link-item {
+    cursor: pointer;
+    text-decoration: none; /* Remove underline from link items */
+}
+.link-item:hover {
+    background-color: var(--neumo-bg);
+}
+
+
+/* Other Profile Options List (existing) */
+.profile-options-list {
+    width: 100%;
+    background-color: var(--white-color);
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden; 
+    margin-bottom: 3rem;
+}
+
+.profile-option-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid var(--light-gray); 
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.profile-option-item:last-child {
+    border-bottom: none; 
+}
+
+.profile-option-item:hover {
+    background-color: var(--neumo-bg); 
+}
+
+.option-icon-text {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.option-icon {
+    font-size: 1.5rem;
+    color: var(--ps-medium-blue);
+    width: 30px; 
+    text-align: center;
+}
+
+.option-text-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left; 
+}
+
+.option-main-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ps-dark-blue);
+}
+
+.option-sub-text {
+    font-size: 0.9rem;
+    color: var(--subtitle-grey);
+    margin-top: 3px;
+}
+
+.option-arrow-icon {
+    font-size: 1rem;
+    color: var(--subtitle-grey);
+}
+
+.profile-logout-container {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.logout-button {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    background-color: var(--primary-blue); 
+    color: var(--white-color);
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: var(--dark-blue);
+}
+
+.back-to-home-prompt {
+    margin-top: 1rem; 
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .profile-page-section {
+        padding: 3rem 1rem;
+        border-radius: 0; 
+        box-shadow: none; 
+    }
+    .profile-page-title {
+        font-size: 2.2rem;
+    }
+    .profile-large-avatar-wrapper {
+        width: 120px;
+        height: 120px;
+    }
+    .profile-user-name {
+        font-size: 1.8rem;
+    }
+    .profile-user-status {
+        font-size: 1rem;
+    }
+    .profile-info-card {
+        margin-bottom: 1rem;
+    }
+    .profile-info-card:last-of-type {
+        margin-bottom: 2rem;
+    }
+    .info-item {
+        padding: 0.8rem 1rem;
+    }
+    .info-label {
+        font-size: 0.8rem;
+    }
+    .info-value, .info-input {
+        font-size: 1rem;
+    }
+    .info-icon {
+        font-size: 1.3rem;
+        width: 25px;
+    }
+    .icon-button {
+        font-size: 1rem;
+        padding: 3px;
+    }
+    .profile-option-item {
+        padding: 1rem 1.2rem;
+    }
+    .option-main-text {
+        font-size: 1rem;
+    }
+    .option-sub-text {
+        font-size: 0.85rem;
+    }
+    .option-icon {
+        font-size: 1.3rem;
+        width: 25px;
+    }
+    .logout-button {
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-page-title {
+        font-size: 1.8rem;
+    }
+    .profile-large-avatar-wrapper {
+        width: 100px;
+        height: 100px;
+    }
+    .profile-user-name {
+        font-size: 1.6rem;
+    }
+    .profile-user-status {
+        font-size: 0.9rem;
+    }
+    .info-item {
+        padding: 0.7rem 0.8rem;
+    }
+    .info-value, .info-input {
+        font-size: 0.95rem;
+    }
+    .info-icon {
+        font-size: 1.2rem;
+        width: 20px;
+    }
+    .option-main-text {
+        font-size: 0.95rem;
+    }
+    .option-sub-text {
+        font-size: 0.8rem;
+    }
+    .option-icon {
+        font-size: 1.2rem;
+        width: 20px;
+    }
+}
+
+/* src/pages/MapPage.css */
+
+.map-page-section {
+    padding: 6rem 2rem;
+    background-color: var(--light-gray);
+    min-height: calc(100vh - var(--navbar-height, 80px) - var(--footer-height, 150px));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.map-header {
+    margin-bottom: 3rem;
+}
+
+.map-page-title {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: var(--ps-dark-blue);
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+}
+
+.map-page-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 60%;
+    height: 4px;
+    background-color: var(--ps-medium-blue);
+    border-radius: 2px;
+}
+
+.map-page-subtitle {
+    font-size: 1.3rem;
+    color: var(--subtitle-grey);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.map-container-and-form {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 2.5rem; /* Space between map and form */
+    max-width: 1200px;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+.map-placeholder {
+    flex: 2; /* Map takes more space */
+    min-width: 450px; /* Minimum width for the map */
+    height: 500px; /* Fixed height for the map area */
+    background-color: #e0e0e0; /* Light grey background for map */
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    color: var(--subtitle-grey);
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 20px;
+}
+
+.map-search-form {
+    flex: 1; /* Form takes less space */
+    min-width: 350px; /* Minimum width for the form */
+    background-color: var(--white-color);
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.form-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--ps-dark-blue);
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.3rem;
+    text-align: center;
+}
+
+.form-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 40%;
+    height: 3px;
+    background-color: var(--ps-light-blue);
+    border-radius: 1.5px;
+}
+
+
+.input-group {
+    display: flex;
+    align-items: center;
+    background-color: var(--neumo-bg); /* Use neumorphic background */
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    border: 1px solid #e0e0e0;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.input-icon {
+    color: var(--ps-medium-blue);
+    font-size: 1.2rem;
+    margin-right: 10px;
+}
+
+.form-input {
+    flex-grow: 1;
+    border: none;
+    background: transparent;
+    padding: 0.5rem 0;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    outline: none;
+}
+
+.form-input::placeholder {
+    color: var(--search-placeholder-grey);
+}
+
+.date-time-group {
+    display: flex;
+    gap: 1.2rem;
+}
+
+.date-time-field {
+    flex: 1; 
+}
+
+.btn-search {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    width: 100%; 
+}
+
+.btn-secondary {
+    background-color: var(--ps-medium-blue); 
+    color: var(--white-color);
+    padding: 0.7rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-secondary:hover {
+    background-color: var(--ps-dark-blue);
+    transform: translateY(-2px);
+}
+
+.back-to-home-prompt {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: var(--white-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    max-width: 500px;
+    width: 100%;
+}
+
+.back-to-home-prompt p {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .map-container-and-form {
+        flex-direction: column; /* Stack map and form vertically */
+        align-items: center;
+    }
+    .map-placeholder, .map-search-form {
+        min-width: unset; /* Remove min-width to allow full width */
+        width: 100%;
+        max-width: 600px; /* Constrain max width for stacking */
+    }
+    .map-placeholder {
+        height: 400px; /* Adjust height when stacked */
+    }
+}
+
+@media (max-width: 768px) {
+    .map-page-section {
+        padding: 4rem 1rem;
+    }
+    .map-page-title {
+        font-size: 2.2rem;
+    }
+    .map-page-subtitle {
+        font-size: 1.1rem;
+    }
+    .map-search-form {
+        padding: 2rem;
+    }
+    .form-title {
+        font-size: 1.6rem;
+    }
+    .date-time-group {
+        flex-direction: column; /* Stack date/time inputs vertically */
+        gap: 1rem;
+    }
+    .form-input {
+        font-size: 1rem;
+    }
+    .btn-search {
+        font-size: 1.1rem;
+        padding: 0.8rem 1.5rem;
+    }
+    .back-to-home-prompt {
+        padding: 1rem;
+    }
+    .back-to-home-prompt p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .map-page-title {
+        font-size: 1.8rem;
+    }
+    .map-page-subtitle {
+        font-size: 1rem;
+    }
+    .map-placeholder {
+        height: 300px;
+    }
+    .map-search-form {
+        padding: 1.5rem;
+    }
+}
+
+/* src/pages/MapPage.css */
+
+/* Base styles for the page section */
+.map-page-section {
+    padding: 6rem 2rem;
+    background-color: var(--light-gray);
+    min-height: calc(100vh - var(--navbar-height, 80px) - var(--footer-height, 150px));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative; /* For modal positioning */
+}
+
+/* Header styles */
+.map-header {
+    margin-bottom: 3rem;
+}
+
+.map-page-title {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: var(--ps-dark-blue);
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+}
+
+.map-page-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 60%;
+    height: 4px;
+    background-color: var(--ps-medium-blue);
+    border-radius: 2px;
+}
+
+.map-page-subtitle {
+    font-size: 1.3rem;
+    color: var(--subtitle-grey);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Map Container */
+.map-canvas-container {
+    width: 100%;
+    max-width: 1000px; /* Max width for the map */
+    height: 600px !important; /* ADDED !important for debugging */
+    background-color: #e0e0e0; /* Fallback background */
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+    margin-bottom: 3rem;
+    overflow: hidden; /* Ensure map tiles stay within bounds */
+}
+
+/* Leaflet map specific styles */
+.leaflet-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px; /* Inherit border-radius */
+}
+
+/* Custom Marker Styling */
+/* Base marker style */
+.custom-div-icon {
+    background: none !important; /* Override Leaflet's default background */
+    border: none !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end; /* Pin at the bottom */
+}
+
+.marker-pin {
+    width: 20px;
+    height: 20px;
+    border-radius: 50% 50% 50% 0; /* Creates a teardrop shape */
+    transform: rotate(-45deg);
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -10px; /* Center the pin */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.marker-icon {
+    position: relative;
+    top: 5px; /* Adjust icon position relative to pin */
+    font-size: 1.5rem; /* Size of the FontAwesome icon */
+    color: white; /* Icon color */
+    transform: rotate(45deg); /* Counter-rotate to keep icon upright */
+}
+
+/* Specific colors for marker statuses */
+.available-marker .marker-pin { background-color: #4CAF50; } /* Green */
+.available-marker .marker-icon { color: white; }
+
+.selected-marker .marker-pin { background-color: #2196F3; } /* Blue */
+.selected-marker .marker-icon { color: white; }
+
+.booked-marker .marker-pin { background-color: #F44336; } /* Red */
+.booked-marker .marker-icon { color: white; }
+
+
+/* Booking Modal */
+.booking-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Dark overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Above everything else */
+}
+
+.booking-modal {
+    background-color: var(--white-color);
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-width: 450px;
+    width: 90%;
+    position: relative;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--subtitle-grey);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close-modal-btn:hover {
+    color: var(--ps-dark-blue);
+}
+
+.booking-modal h2 {
+    font-size: 2rem;
+    color: var(--ps-dark-blue);
+    margin-bottom: 1rem;
+}
+
+.booking-modal p {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.spot-price .fa-dollar-sign {
+    color: var(--success-green);
+}
+
+.spot-status .status-icon-available { color: #4CAF50; }
+.spot-status .status-icon-booked { color: #F44336; }
+.spot-status .status-available { color: #4CAF50; font-weight: bold; }
+.spot-status .status-booked { color: #F44336; font-weight: bold; }
+
+.booking-modal .btn-primary {
+    margin-top: 1.5rem;
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+}
+
+.booked-info {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--light-gray);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.booking-timer {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--ps-dark-blue);
+}
+
+.booking-timer span {
+    color: var(--primary-blue);
+}
+
+.booking-timer .fa-clock {
+    color: var(--primary-blue);
+}
+
+.btn-cancel-booking {
+    background-color: #FF5722; /* Orange-red for cancel */
+    color: var(--white-color);
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 25px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-cancel-booking:hover {
+    background-color: #E64A19;
+}
+
+
+/* Payment Modal Styles */
+.payment-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Darker overlay for payment */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001; /* Higher z-index than booking modal */
+}
+
+.payment-modal {
+    background-color: var(--white-color);
+    padding: 1rem; /* Further reduced padding */
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    max-width: 300px; /* Further reduced max-width */
+    width: 90%; 
+    position: relative;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem; /* Reduced gap */
+}
+
+.payment-modal h2 {
+    font-size: 1.5rem; /* Reduced font size */
+    color: var(--ps-dark-blue);
+    margin-bottom: 0.5rem; /* Adjusted margin */
+}
+
+.payment-amount {
+    font-size: 1.2rem; /* Reduced font size */
+    font-weight: bold;
+    color: var(--success-green);
+    margin-bottom: 0.7rem; /* Adjusted margin */
+}
+
+.payment-amount .currency-display {
+    margin-right: 5px;
+}
+
+.payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem; /* Reduced gap */
+}
+
+.form-group {
+    text-align: left;
+}
+
+.form-group label {
+    font-size: 0.8rem; /* Reduced font size */
+    color: var(--ps-dark-blue);
+    font-weight: 600;
+    margin-bottom: 0.15rem; /* Adjusted margin */
+    display: block;
+}
+
+.radio-group {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 0.4rem; /* Reduced gap */
+    margin-top: 0.15rem; /* Adjusted margin */
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem; /* Reduced gap */
+    font-weight: normal;
+    cursor: pointer;
+    color: var(--text-color);
+    background-color: var(--neumo-bg);
+    padding: 0.4rem 0.7rem; /* Reduced padding */
+    border-radius: 7px; /* Slightly smaller border-radius */
+    border: 1px solid #e0e0e0;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.radio-group label:hover {
+    background-color: #e8e8e8;
+}
+
+.radio-group input[type="radio"] {
+    appearance: none; 
+    -webkit-appearance: none;
+    width: 12px; /* Reduced size */
+    height: 12px; /* Reduced size */
+    border: 2px solid var(--ps-medium-blue);
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.radio-group input[type="radio"]:checked {
+    background-color: var(--ps-medium-blue);
+    border-color: var(--ps-medium-blue);
+}
+
+.radio-group input[type="radio"]:checked::after {
+    content: '';
+    width: 4px; /* Reduced size */
+    height: 4px; /* Reduced size */
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.method-icon {
+    margin-left: 0.2rem; /* Reduced margin */
+    color: var(--ps-medium-blue);
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.35rem 0.6rem; /* FURTHER REDUCED PADDING */
+    border: 1px solid #e0e0e0;
+    border-radius: 7px; /* Adjusted border-radius */
+    font-size: 0.8rem; /* FURTHER REDUCED FONT SIZE */
+    color: var(--text-color);
+    background-color: var(--neumo-bg);
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box; /* Ensures padding is included in width */
+}
+
+.form-input::placeholder {
+    color: var(--search-placeholder-grey);
+}
+
+.form-input:focus {
+    border-color: var(--ps-medium-blue);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.btn-pay-now {
+    padding: 0.6rem 1.2rem; /* Reduced padding */
+    font-size: 0.9rem; /* Reduced font size */
+    margin-top: 0.6rem; /* Adjusted margin */
+}
+
+/* Back to Home Button */
+.back-to-home-prompt {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: var(--white-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    max-width: 500px;
+    width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .map-page-section {
+        padding: 4rem 1rem;
+    }
+    .map-page-title {
+        font-size: 2.2rem;
+    }
+    .map-page-subtitle {
+        font-size: 1.1rem;
+    }
+    .map-canvas-container {
+        height: 400px !important; 
+        border-radius: 10px;
+    }
+    .booking-modal, .payment-modal {
+        padding: 0.8rem; /* Adjusted for smaller screens */
+        width: 95%;
+    }
+    .booking-modal h2, .payment-modal h2 {
+        font-size: 1.3rem; /* Adjusted for smaller screens */
+    }
+    .booking-modal p, .payment-modal p {
+        font-size: 0.85rem; /* Adjusted for smaller screens */
+    }
+    .booking-timer {
+        font-size: 1rem;
+    }
+    .btn-primary, .btn-cancel-booking, .btn-pay-now {
+        padding: 0.4rem 0.8rem; /* Adjusted for smaller screens */
+        font-size: 0.85rem; /* Adjusted for smaller screens */
+    }
+    .payment-amount {
+        font-size: 1.1rem; /* Adjusted for smaller screens */
+    }
+    .radio-group label {
+        padding: 0.3rem 0.6rem; /* Adjusted for smaller screens */
+        font-size: 0.75rem; /* Adjusted for smaller screens */
+    }
+    .form-input {
+        padding: 0.25rem 0.5rem; /* Adjusted for smaller screens */
+        font-size: 0.75rem; /* Adjusted for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .map-page-title {
+        font-size: 1.8rem;
+    }
+    .map-page-subtitle {
+        font-size: 1rem;
+    }
+    .map-canvas-container {
+        height: 300px !important;
+    }
+    .booking-modal, .payment-modal {
+        padding: 0.6rem; /* Further reduced for very small screens */
+    }
+    .payment-modal h2 {
+        font-size: 1.1rem;
+    }
+    .payment-amount {
+        font-size: 1rem;
+    }
+    .form-group label {
+        font-size: 0.75rem;
+    }
+    .radio-group label {
+        flex: 1 1 auto; 
+        justify-content: center;
+        text-align: center;
+        font-size: 0.7rem;
+    }
+    .form-input {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.7rem;
+    }
+    .btn-pay-now {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* src/pages/ContactUsPage.css */
+
+/* Base section styling for consistent page layout */
+.contact-us-section {
+    padding: 6rem 2rem;
+    background-color: var(--light-gray); /* Ensure this CSS variable is defined elsewhere, e.g., in App.css */
+    min-height: calc(100vh - var(--navbar-height, 80px) - var(--footer-height, 150px)); /* Adjust for header/footer */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Header styling for the page title and subtitle */
+.contact-header {
+    margin-bottom: 3rem;
+}
+
+.contact-title {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: var(--ps-dark-blue); /* Ensure this CSS variable is defined */
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+}
+
+/* Underline effect for the title */
+.contact-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 60%;
+    height: 4px;
+    background-color: var(--ps-medium-blue); /* Ensure this CSS variable is defined */
+    border-radius: 2px;
+}
+
+.contact-subtitle {
+    font-size: 1.3rem;
+    color: var(--subtitle-grey); /* Ensure this CSS variable is defined */
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Main content area, using flexbox for responsive layout of info and form */
+.contact-content {
+    display: flex;
+    flex-wrap: wrap; /* Allows sections to wrap onto new lines on smaller screens */
+    justify-content: center;
+    gap: 3.5rem; /* Increased gap slightly to prevent horizontal crowding */
+    width: 100%;
+    max-width: 1200px; /* Max width for the content block */
+    margin-bottom: 3rem;
+}
+
+/* Styling for both contact information and form containers */
+.contact-info,
+.contact-form-container {
+    background-color: var(--white-color); /* Ensure this CSS variable is defined */
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    
+    /* Adjusted flex properties */
+    flex: 1 1 45%; /* Grow, shrink, and preferred width of 45% of parent */
+    box-sizing: border-box; /* Include padding in width calculation */
+    min-width: 320px; /* Ensure a minimum width before wrapping */
+    max-width: 550px; /* Max width for each individual section */
+    
+    text-align: left; /* Align text inside these containers to the left */
+    
+    /* Flex properties for contact-info to arrange its children (text and map) */
+    display: flex; 
+    flex-direction: column;
+    gap: 1rem; /* Space between text elements and the map */
+}
+
+/* Sub-headings within contact info and form */
+.contact-info h3,
+.contact-form-container h3 {
+    font-size: 2rem;
+    color: var(--ps-dark-blue); /* Ensure this CSS variable is defined */
+    margin-bottom: 0.5rem; /* Adjusted margin for better flow with map */
+    text-align: center; /* Center these sub-headings */
+}
+
+/* Styling for contact information paragraphs */
+.contact-info p {
+    font-size: 1.1rem;
+    color: var(--text-color); /* Ensure this CSS variable is defined */
+    margin-bottom: 0.5rem; /* Adjusted margin */
+    display: flex; /* Use flex to align icon and text */
+    align-items: center;
+    gap: 10px; /* Space between icon and text */
+}
+
+/* Styling for FontAwesome icons in contact info */
+.contact-info .fa-envelope,
+.contact-info .fa-phone,
+.contact-info .fa-map-marker-alt {
+    color: var(--primary-blue); /* Ensure this CSS variable is defined */
+    font-size: 1.3rem;
+}
+
+/* Styling for the map container within contact-info */
+.contact-map-container {
+    width: 100%;
+    height: 250px; /* Fixed height for the map */
+    border-radius: 10px;
+    overflow: hidden; /* Ensure map tiles respect border-radius */
+    margin-top: 1.5rem; /* Space above the map */
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1); /* Subtle inner shadow */
+}
+
+/* Ensure Leaflet map itself takes full size of its container */
+.contact-map-container .leaflet-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px; /* Inherit border-radius from parent */
+}
+
+
+/* Styling for the contact form */
+.contact-form {
+    display: flex;
+    flex-direction: column; /* Stack form elements vertically */
+    gap: 1rem; /* Space between form groups */
+}
+
+.contact-form .form-group {
+    margin-bottom: 0.5rem; /* Additional spacing for form groups */
+}
+
+.contact-form label {
+    font-size: 1rem;
+    color: var(--ps-dark-blue); /* Ensure this CSS variable is defined */
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block; /* Make labels block-level for proper spacing */
+}
+
+/* Styling for all input fields and textareas in the form */
+.contact-form .form-input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    color: var(--text-color); /* Ensure this CSS variable is defined */
+    background-color: var(--neumo-bg); /* Ensure this CSS variable is defined */
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.contact-form .form-input::placeholder {
+    color: var(--search-placeholder-grey); /* Ensure this CSS variable is defined */
+}
+
+.contact-form .form-input:focus {
+    border-color: var(--ps-medium-blue); /* Ensure this CSS variable is defined */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+/* Specific styling for the textarea to allow vertical resizing */
+.contact-form textarea.form-input {
+    resize: vertical;
+    min-height: 100px; /* Minimum height for the textarea */
+}
+
+/* Styling for the "Send Message" button */
+.btn-send-message {
+    margin-top: 1rem;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Space between icon and text in button */
+}
+
+.btn-send-message .fa-paper-plane {
+    font-size: 1.2rem;
+}
+
+/* Styling for disabled button state */
+.btn-send-message:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.7; /* Slightly dim disabled button */
+}
+
+/* Styling for submission status messages (success/error) */
+.submission-message {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.submission-message.success {
+    background-color: #e6ffe6; /* Light green background */
+    color: #4CAF50; /* Green text color */
+    border: 1px solid #4CAF50;
+}
+
+.submission-message.error {
+    background-color: #ffe6e6; /* Light red background */
+    color: #F44336; /* Red text color */
+    border: 1px solid #F44336;
+}
+
+/* Responsive adjustments for smaller screens (e.g., tablets) */
+@media (max-width: 992px) { /* Adjusted breakpoint for stacking */
+    .contact-content {
+        flex-direction: column; /* Stack contact info and form vertically */
+        gap: 2rem; /* Reduce gap when stacked */
+    }
+    .contact-info,
+    .contact-form-container {
+        padding: 2rem; /* Reduce padding inside containers */
+        min-width: unset; /* Remove min-width constraint for better stacking */
+        max-width: 100%; /* Allow them to take full width */
+        flex: 1 1 100%; /* Take full width when stacked */
+    }
+    .contact-info h3,
+    .contact-form-container h3 {
+        font-size: 1.8rem;
+    }
+    .contact-info p {
+        font-size: 1rem;
+    }
+    /* Adjust map height for smaller screens */
+    .contact-map-container {
+        height: 200px; 
+        margin-top: 1rem;
+    }
+    .contact-form label {
+        font-size: 0.9rem;
+    }
+    .contact-form .form-input {
+        padding: 0.7rem 0.9rem;
+        font-size: 1rem;
+    }
+    .btn-send-message {
+        padding: 0.8rem 1.5rem;
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-us-section {
+        padding: 3rem 0.8rem; /* Further reduce padding */
+    }
+    .contact-title {
+        font-size: 1.8rem;
+    }
+    .contact-subtitle {
+        font-size: 0.95rem;
+    }
+    .contact-info,
+    .contact-form-container {
+        padding: 1.5rem;
+    }
+    .contact-info h3,
+    .contact-form-container h3 {
+        font-size: 1.5rem;
+    }
+    .contact-info p {
+        font-size: 0.9rem;
+    }
+    /* Adjust map height for very small screens */
+    .contact-map-container {
+        height: 180px;
+        margin-top: 0.8rem;
+    }
+    .contact-form label {
+        font-size: 0.85rem;
+    }
+    .contact-form .form-input {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+    }
+    .btn-send-message {
+        padding: 0.7rem 1.2rem;
+        font-size: 1rem;
+    }
+}
+
+/* src/AuthPages.css - Neumorphism Style */
+/* src/AuthPages.css - More Compact Form Styling */
+
+:root {
+    /* Define base colors for Neumorphism */
+    --neumorphism-bg: #e0e5ec; /* Light gray background */
+    --neumorphism-light-shadow: #a3b1c6; /* Darker shadow (bottom-right) */
+    --neumorphism-dark-shadow: #ffffff; /* Lighter shadow (top-left) */
+    --neumorphism-inset-shadow: inset 5px 5px 10px #a3b1c6, inset -5px -5px 10px #ffffff; /* Inset for pressed/recessed elements */
+
+    /* Primary color for buttons/accents */
+    --primary-color: #55c1e3; /* A soft blue/cyan for the main button */
+    --primary-color-dark: #3a97bd; /* Slightly darker for hover */
+    --primary-color-text: #ffffff;
+
+    /* Text colors */
+    --text-color-dark: #333333;
+    --text-color-medium: #666666;
+    --text-color-light: #888888;
+
+    /* Other UI colors */
+    --border-color: #ccd0d7;
+    --danger-color: #dc3545;
+    --button-disabled-background: #c3c7cc;
+
+    /* Assuming a header height from your App.css if any */
+    --header-height: 60px; /* Adjust if you have a header */
+}
+
+body {
+    background-color: var(--neumorphism-bg);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.auth-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Min-height to fill viewport, considering header */
+    min-height: calc(100vh - var(--header-height, 0px));
+    background-color: var(--neumorphism-bg);
+    padding: 10px; /* Reduced padding further */
+    box-sizing: border-box;
+}
+
+.auth-form-card {
+    background-color: var(--neumorphism-bg);
+    padding: 25px; /* Reduced from 30px */
+    border-radius: 12px; /* Slightly less rounded */
+    box-shadow: 6px 6px 12px var(--neumorphism-light-shadow), /* Smaller shadow */
+                -6px -6px 12px var(--neumorphism-dark-shadow);
+    width: 100%;
+    max-width: 340px; /* Reduced significantly from 360px */
+    text-align: center;
+}
+
+.auth-form-card h2 {
+    color: var(--text-color-dark);
+    margin-bottom: 20px; /* Reduced from 25px */
+    font-size: 1.8rem; /* Reduced from 2rem */
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.auth-logo-container {
+    margin-bottom: 20px; /* Reduced from 25px */
+}
+
+.auth-logo {
+    width: 70px; /* Reduced from 80px */
+    height: 70px; /* Reduced from 80px */
+    border-radius: 50%;
+    background-color: var(--neumorphism-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 8px auto; /* Reduced bottom margin */
+    box-shadow: 3px 3px 6px var(--neumorphism-light-shadow), /* Smaller shadow */
+                -3px -3px 6px var(--neumorphism-dark-shadow);
+    overflow: hidden;
+}
+
+.auth-logo img {
+    width: 70%; /* Adjust image size inside the circle */
+    height: 70%;
+    object-fit: contain;
+}
+
+.auth-slogan {
+    font-size: 1rem; /* Reduced from 1.1rem */
+    font-weight: 600;
+    color: var(--text-color-dark);
+    margin-bottom: 5px;
+}
+
+.auth-tagline {
+    font-size: 0.8rem; /* Reduced from 0.85rem */
+    color: var(--text-color-light);
+}
+
+
+.form-group {
+    margin-bottom: 15px; /* Reduced from 20px */
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px; /* Reduced from 8px */
+    color: var(--text-color-medium);
+    font-size: 0.9rem; /* Reduced from 0.95rem */
+    font-weight: 500;
+    text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.05);
+}
+
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    width: calc(100% - 20px); /* Account for padding: 10px on each side */
+    padding: 10px; /* Reduced from 12px */
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem; /* Reduced from 0.95rem */
+    color: var(--text-color-dark);
+    background-color: var(--neumorphism-bg);
+    box-shadow: var(--neumorphism-inset-shadow);
+    transition: all 0.2s ease;
+    -webkit-appearance: none;
+}
+
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus {
+    outline: none;
+    box-shadow: 5px 5px 10px var(--neumorphism-light-shadow),
+                -5px -5px 10px var(--neumorphism-dark-shadow),
+                var(--neumorphism-inset-shadow);
+}
+
+/* Icon styling (assuming FontAwesome in your HTML structure) */
+.form-group .input-icon {
+    position: absolute;
+    left: 10px; /* Adjusted to match new input padding */
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-color-light);
+    pointer-events: none;
+}
+
+.form-group .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.form-group .input-wrapper input {
+    padding-left: 35px; /* Reduced from 40px */
+}
+
+
+.auth-button {
+    width: 100%;
+    padding: 12px; /* Reduced from 15px */
+    background-color: var(--primary-color);
+    color: var(--primary-color-text);
+    border: none;
+    border-radius: 10px; /* Slightly less rounded */
+    font-size: 1rem; /* Reduced from 1.1rem */
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 5px 5px 10px var(--neumorphism-light-shadow),
+                -5px -5px 10px var(--neumorphism-dark-shadow);
+    transition: all 0.2s ease;
+    margin-top: 15px;
+}
+
+.auth-button:hover {
+    background-color: var(--primary-color-dark);
+    box-shadow: 2px 2px 5px var(--neumorphism-light-shadow),
+                -2px -2px 5px var(--neumorphism-dark-shadow);
+    transform: translateY(1px);
+}
+
+.auth-button:active {
+    box-shadow: var(--neumorphism-inset-shadow),
+                inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+    transform: translateY(2px);
+}
+
+.auth-button:disabled {
+    background-color: var(--button-disabled-background);
+    color: var(--text-color-light);
+    cursor: not-allowed;
+    opacity: 0.8;
+    box-shadow: inset 2px 2px 5px var(--neumorphism-light-shadow),
+                inset -2px -2px 5px var(--neumorphism-dark-shadow);
+}
+
+.auth-error {
+    color: var(--danger-color);
+    margin-top: 10px; /* Reduced from 12px */
+    font-size: 0.8rem; /* Reduced from 0.85rem */
+    text-align: left;
+    text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.05);
+}
+
+.auth-link-text {
+    margin-top: 20px;
+    color: var(--text-color-medium);
+    font-size: 0.85rem; /* Reduced from 0.9rem */
+    font-weight: 500;
+}
+
+.auth-link-text a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.auth-link-text a:hover {
+    text-decoration: underline;
+    color: var(--primary-color-dark);
+}
+
+/* Responsive adjustments for even smaller screens */
+@media (max-width: 480px) {
+    .auth-form-card {
+        padding: 15px; /* Even less padding on very small screens */
+        max-width: 98%; /* Allow it to take more width if screen is small */
+        border-radius: 10px;
+    }
+
+    .auth-form-card h2 {
+        font-size: 1.6rem;
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 12px;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+    }
+
+    .form-group input[type="email"],
+    .form-group input[type="password"] {
+        padding: 8px; /* Further reduced input padding */
+        font-size: 0.85rem;
+        width: calc(100% - 16px);
+    }
+    .form-group .input-icon {
+        left: 8px; /* Adjusted to new input padding */
+    }
+    .form-group .input-wrapper input {
+        padding-left: 30px; /* Adjusted for icon */
+    }
+
+    .auth-button {
+        padding: 10px; /* Further reduced button padding */
+        font-size: 0.95rem;
+        margin-top: 10px;
+    }
+
+    .auth-link-text {
+        margin-top: 15px;
+        font-size: 0.8rem;
+    }
+}

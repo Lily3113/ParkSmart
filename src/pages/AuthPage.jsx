@@ -108,7 +108,7 @@ const AuthPage = () => {
             <div className="auth-form-card">
                 <div className="auth-logo-container">
                     <div className="auth-logo">
-                        <img src="/images/logo.png" alt="Web Dev Logo" />
+                        <img src="/images/logo.png" alt="ParkSmart" />
                     </div>
                     <p className="auth-slogan">Your hassle-free parking solution.</p>
                     <p className="auth-tagline">Made easy!</p>
@@ -124,7 +124,7 @@ const AuthPage = () => {
                                 id="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                placeholder="username"
+                                placeholder="email"
                                 required
                             />
                         </div>

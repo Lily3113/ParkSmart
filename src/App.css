@@ -2372,6 +2372,7 @@ body {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    z-index: 1000px;
 }
 
 .map-header {
